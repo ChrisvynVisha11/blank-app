@@ -1,5 +1,7 @@
 # 🎈 Blank app template
 
+pip install streamlit numpy
+streamlit run house_recommender.py
 import streamlit as st
 import numpy as np
 
