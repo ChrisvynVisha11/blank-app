@@ -568,18 +568,13 @@ with st.sidebar:
         chosen_archetype = archetype_options[chosen_label]
         min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
-        ask_floor = st.radio("Do you want floor-specific recommendations?", ["Yes", "No"], index=1, key="ask_floor_arch")
+        ask_floor  = st.radio("Would you like floor insulation recommendations?", ["Yes", "No"], index=1, key="ask_floor_arch")
         floor_type = st.selectbox("Floor Type", ["Concrete", "Suspended Timber"], key="ft_arch") if ask_floor == "Yes" else None
-        _cats = [c if c != "Wall Insulation Material" else "Wall Insulation" 
-                 for c in SOLUTIONS_DF["Category"].unique().tolist()]
+        _cats = [c if c != "Wall Insulation Material" else "Wall Insulation"
+                 for c in SOLUTIONS_DF["Category"].unique().tolist()
+                 if c not in ("Floor Insulation", "Floor Insulation Material")]
         _cats = list(dict.fromkeys(_cats))
-        category_filter = st.multiselect(
-            "Filter by category",
-            options=_cats,
-            default=_cats,
-            key="cf_arch"
-        )
-        # Map merged "Wall Insulation" back to both original categories for filtering
+        category_filter = st.multiselect("Filter by category", options=_cats, default=_cats, key="cf_arch")
         expanded_filter = []
         for c in category_filter:
             expanded_filter.append(c)
@@ -597,19 +592,15 @@ with st.sidebar:
         tenure      = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rental (Social)", "Rented (Private)", "Rented (Social)"])
         const_age   = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
         floor_area  = st.slider("Total Floor Area (m²)", 20, 400, 80)
-        ask_floor   = st.radio("Do you want floor-specific recommendations?", ["Yes", "No"], index=1, key="ask_floor_custom")
+        ask_floor   = st.radio("Would you like floor insulation recommendations?", ["Yes", "No"], index=1, key="ask_floor_custom")
         floor_type  = st.selectbox("Floor Type", ["Concrete", "Suspended Timber"], key="ft_custom") if ask_floor == "Yes" else None
         min_score   = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
         _cats = [c if c != "Wall Insulation Material" else "Wall Insulation"
-                 for c in SOLUTIONS_DF["Category"].unique().tolist()]
+                 for c in SOLUTIONS_DF["Category"].unique().tolist()
+                 if c not in ("Floor Insulation", "Floor Insulation Material")]
         _cats = list(dict.fromkeys(_cats))
-        category_filter = st.multiselect(
-            "Filter by category",
-            options=_cats,
-            default=_cats,
-            key="cf_custom"
-        )
+        category_filter = st.multiselect("Filter by category", options=_cats, default=_cats, key="cf_custom")
         expanded_filter = []
         for c in category_filter:
             expanded_filter.append(c)
@@ -695,7 +686,11 @@ else:
         extra[col_id] = extra[col_id].clip(lower=1)  # treat as at least score 1
         rec_df = pd.concat([rec_df, extra]).drop_duplicates(subset=["Solution"]).reset_index(drop=True)
 
-    rec_df = rec_df[rec_df["Category"].isin(category_filter)]
+    # Always force-include floor insulation — score is 0 for many clusters but still applicable
+    floor_cats = ["Floor Insulation", "Floor Insulation Material"]
+    floor_extra = SOLUTIONS_DF[SOLUTIONS_DF["Category"].isin(floor_cats)].copy()
+    floor_extra[col_id] = floor_extra[col_id].clip(lower=1)
+    rec_df = pd.concat([rec_df, floor_extra]).drop_duplicates(subset=["Solution"]).reset_index(drop=True)
 
     built_form_resolved = cdata["built_form"]
     scale = get_scale_for_built_form(built_form_resolved)
@@ -707,7 +702,8 @@ else:
     else:
         wall_type_resolved = cdata["wall_type"]
     rec_df = filter_by_wall_type(rec_df, wall_type_resolved, wall_ins_resolved)
-    rec_df = filter_by_floor_type(rec_df, floor_type)
+    # Remove floor insulation from cluster recommendations — handled separately below
+    rec_df = rec_df[~rec_df["Category"].isin(["Floor Insulation", "Floor Insulation Material"])]
 
     scale_label_map = {"small": "Small-scale", "medium": "Medium-scale", "large": "Large-scale"}
     scale_display = scale_label_map.get(scale, "All scales")
@@ -760,6 +756,36 @@ else:
             )
 
     st.markdown("---")
+
+    # ── Standalone Floor Insulation Section ──
+    if floor_type is not None:
+        st.markdown('<div class="section-header">🏗️ Floor Insulation Recommendations</div>', unsafe_allow_html=True)
+        st.markdown(f'<p style="color:#3d3d3d;font-size:0.85rem;margin-bottom:0.8rem;">Based on your floor type: <strong>{floor_type}</strong></p>', unsafe_allow_html=True)
+
+        floor_df = SOLUTIONS_DF[SOLUTIONS_DF["Category"].isin(["Floor Insulation", "Floor Insulation Material"])].copy()
+        floor_df = filter_by_floor_type(floor_df, floor_type)
+        floor_df = filter_by_scale(floor_df, scale)
+
+        for _, row in floor_df.iterrows():
+            carbon = row["CarbonRating"] if row["CarbonRating"] else ""
+            energy = row["EnergyRating"] if row["EnergyRating"] else ""
+            afford = row["AffordRating"] if row["AffordRating"] else ""
+            carbon_html = f'<span class="rating-pill {rating_css(carbon)}">🌿 Carbon: {carbon}</span>' if carbon else ""
+            energy_html = f'<span class="rating-pill {rating_css(energy)}">⚡ Energy: {energy}</span>' if energy else ""
+            afford_html = f'<span class="rating-pill {rating_css(afford)}">💷 Afford: {afford}</span>' if afford else ""
+            st.markdown(f"""
+            <div class="rec-card priority-medium">
+                <div class="rec-title">{row['Solution']}</div>
+                <div class="rec-badges">
+                    <span class="badge badge-blue">{row['Category']}</span>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+                    {carbon_html}{energy_html}{afford_html}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown("---")
+
     st.markdown('<div class="section-header">📊 How You Compare to Other Archetypes</div>', unsafe_allow_html=True)
 
     my       = ARCHETYPE_METRICS[resolved]
