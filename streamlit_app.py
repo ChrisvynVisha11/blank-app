@@ -258,14 +258,14 @@ h1, h2, h3 {
 # ─────────────────────────────────────────────
 
 CLUSTERS = {
-    1: {"label": "Cluster 1 – Older Private Rental Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "System", "built_form": "Detached", "tenure": "Rental (Private)", "construction_age": "1900-1949", "floor_area": 77.7, "imd_decile": 2, "income": 34951},
-    2: {"label": "Cluster 2 – Owner-Occupied Pre-War Semi", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Semi-Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 134.6, "imd_decile": 0, "income": 47848},
-    3: {"label": "Cluster 3 – Private Rental Pre-War Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Rented (Private)", "construction_age": "1900-1949", "floor_area": 46.7, "imd_decile": 2, "income": 30876},
-    4: {"label": "Cluster 4 – Owner-Occupied Pre-War Terrace", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Mid-Terrace", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 47.6, "imd_decile": 3, "income": 38518},
-    5: {"label": "Cluster 5 – Social Rental Post-War Flat", "property_type": "Flat", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "End Terrace", "tenure": "Rental (Social)", "construction_age": "1950-2002", "floor_area": 46.9, "imd_decile": 0, "income": 32923},
-    6: {"label": "Cluster 6 – Uninsulated Owner Detached", "property_type": "House", "wall_insulation": "None", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 23.3, "imd_decile": 1, "income": 33125},
-    7: {"label": "Cluster 7 – Well-Insulated Post-War Semi", "property_type": "House", "wall_insulation": "Full", "wall_type": "Cavity", "built_form": "Semi-Detached", "tenure": "Owner Occupied", "construction_age": "1950-2002", "floor_area": 44.8, "imd_decile": 1, "income": 33804},
-    8: {"label": "Cluster 8 – Large Wealthy Owner Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
+    1: {"label": "Archtype 1 – Older Private Rental Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "System", "built_form": "Detached", "tenure": "Rental (Private)", "construction_age": "1900-1949", "floor_area": 77.7, "imd_decile": 2, "income": 34951},
+    2: {"label": "Archtype 2 – Owner-Occupied Pre-War Semi", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Semi-Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 134.6, "imd_decile": 0, "income": 47848},
+    3: {"label": "Archtype 3 – Private Rental Pre-War Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Rented (Private)", "construction_age": "1900-1949", "floor_area": 46.7, "imd_decile": 2, "income": 30876},
+    4: {"label": "Archtype 4 – Owner-Occupied Pre-War Terrace", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Mid-Terrace", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 47.6, "imd_decile": 3, "income": 38518},
+    5: {"label": "Archtype 5 – Social Rental Post-War Flat", "property_type": "Flat", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "End Terrace", "tenure": "Rental (Social)", "construction_age": "1950-2002", "floor_area": 46.9, "imd_decile": 0, "income": 32923},
+    6: {"label": "Archtype 6 – Uninsulated Owner Detached", "property_type": "House", "wall_insulation": "None", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 23.3, "imd_decile": 1, "income": 33125},
+    7: {"label": "Archtype 7 – Well-Insulated Post-War Semi", "property_type": "House", "wall_insulation": "Full", "wall_type": "Cavity", "built_form": "Semi-Detached", "tenure": "Owner Occupied", "construction_age": "1950-2002", "floor_area": 44.8, "imd_decile": 1, "income": 33804},
+    8: {"label": "Archtype 8 – Large Wealthy Owner Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
 }
 
 # Solutions: (solution_type, sub_type, cluster_scores[1..8])
@@ -438,7 +438,7 @@ with st.sidebar:
             options=SOLUTIONS_DF["Category"].unique().tolist(),
             default=SOLUTIONS_DF["Category"].unique().tolist()
         )
-        run = st.button("Find Matching Cluster & Recommendations →")
+        run = st.button("Find Matching Archtypes & Recommendations →")
 
 # ─────────────────────────────────────────────
 # MAIN CONTENT
@@ -453,7 +453,7 @@ st.markdown("""
 
 if not run:
     # Landing state
-    st.markdown('<div class="section-header">About the Clusters</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">About the Archtypes </div>', unsafe_allow_html=True)
     st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each cluster represents a common UK residential property archetype. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
@@ -521,7 +521,7 @@ else:
     rec_df = get_recommendations_for_cluster(resolved_cluster, min_score_val)
     rec_df = rec_df[rec_df["Category"].isin(category_filter)]
 
-    st.markdown(f'<div class="section-header">✅ Recommendations for Cluster {resolved_cluster}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">✅ Recommendations for Archtype {resolved_cluster}</div>', unsafe_allow_html=True)
 
     if rec_df.empty:
         st.info("No recommendations found for the selected filters. Try lowering the minimum score threshold.")
