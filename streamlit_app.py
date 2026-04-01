@@ -478,7 +478,7 @@ with st.sidebar:
 
 st.markdown("""
 <div class="hero-banner">
-    <h1>🏠 RetroFit Recommender</h1>
+    <h1>🏠 Retrofit Recommender</h1>
     <p>Provides retrofit solutions for UK residential properties matched to your archetype or property characteristics.</p>
 </div>
 """, unsafe_allow_html=True)
