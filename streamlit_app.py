@@ -171,7 +171,24 @@ h1, h2, h3 {
 .badge-amber { background: #fef3cd; color: #7d5a00; }
 .badge-blue  { background: #dbeafe; color: #1e3a5f; }
 .badge-red   { background: #fee2e2; color: #7f1d1d; }
+.badge-gray  { background: #f3f4f6; color: #374151; }
 .rec-detail  { font-size: 0.8rem; color: var(--muted); }
+.rating-pill {
+    border-radius: 6px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+.rating-A  { background: #d8f3dc; color: #1b4332; }
+.rating-B  { background: #dcfce7; color: #166534; }
+.rating-BC { background: #fef9c3; color: #713f12; }
+.rating-C  { background: #fef3cd; color: #7d5a00; }
+.rating-D  { background: #fee2e2; color: #7f1d1d; }
+.rating-DE { background: #fce7f3; color: #831843; }
+.rating-E  { background: #f3e8ff; color: #581c87; }
 
 .section-header {
     font-family: 'DM Serif Display', serif;
@@ -237,85 +254,88 @@ CLUSTERS = {
 }
 
 SOLUTIONS_RAW = [
-    ("Heating Source", "Mechanical Ventilation with Heat Recovery (high efficiency)",    2,0,2,2,2,2,1,1),
-    ("Heating Source", "Mechanical Ventilation with Heat Recovery (low efficiency)",     2,0,2,2,2,2,1,1),
-    ("Heating Source", "ASHP (small-scale/low-efficiency)",                              1,0,2,2,0,1,0,1),
-    ("Heating Source", "ASHP (medium-scale/medium efficiency)",                          1,0,2,2,0,1,0,1),
-    ("Heating Source", "ASHP (large-scale/high efficiency)",                             1,0,2,2,0,1,0,1),
-    ("Heating Source", "GSHP (small-scale/low efficiency)",                              1,0,2,2,0,1,0,1),
-    ("Heating Source", "GSHP (medium-scale/medium efficiency)",                          1,0,2,2,0,1,0,1),
-    ("Heating Source", "GSHP (large-scale/high efficiency)",                             1,0,2,2,0,1,0,1),
-    ("Heating Source", "WSHP (small-scale/low efficiency)",                              1,0,2,2,0,1,0,1),
-    ("Heating Source", "WSHP (medium-scale/medium efficiency)",                          1,0,2,2,0,1,0,1),
-    ("Heating Source", "WSHP (large-scale/high efficiency)",                             1,0,2,2,0,1,0,1),
-    ("Heating Source", "District Energy Network Heat Exchanger",                         2,1,1,2,1,2,2,1),
-    ("Smart Heating Controls", "Small-scale",                                            2,1,2,2,0,2,1,2),
-    ("Smart Heating Controls", "Medium-scale",                                           2,1,2,2,0,2,1,2),
-    ("Smart Heating Controls", "Large-scale",                                            2,1,2,2,0,2,1,2),
-    ("LED Lighting", "Small-scale",                                                      1,1,2,1,1,2,1,1),
-    ("LED Lighting", "Medium-scale",                                                     1,1,2,1,1,2,1,1),
-    ("LED Lighting", "Large-scale",                                                      1,1,2,1,1,2,1,1),
-    ("Solar PV", "Solar Photovoltaics",                                                  1,0,1,2,2,2,1,2),
-    ("Wall Insulation", "External Solid Wall Insulation",                                1,0,1,2,0,0,1,2),
-    ("Wall Insulation", "Internal Solid Wall Insulation",                                1,0,1,2,0,0,1,2),
-    ("Wall Insulation", "Cavity Wall Insulation (small-scale)",                          1,0,1,2,0,0,1,2),
-    ("Wall Insulation", "Cavity Wall Insulation (medium-scale)",                         1,0,1,2,0,0,1,2),
-    ("Wall Insulation", "Cavity Wall Insulation (large-scale)",                          1,0,1,2,0,0,1,2),
-    ("Glazing", "Triple Glazing – Hardwood frames",                                      2,2,1,2,2,2,2,2),
-    ("Glazing", "Triple Glazing – uPVC frames",                                          2,2,1,2,2,2,2,2),
-    ("Glazing", "Triple Glazing – Aluminium frames",                                     2,2,1,2,2,2,2,2),
-    ("Glazing", "Secondary Glazing – Hardwood frames",                                   0,0,2,0,2,1,0,0),
-    ("Glazing", "Secondary Glazing – uPVC frames",                                       0,0,2,0,2,1,0,0),
-    ("Glazing", "Secondary Glazing – Aluminium frames",                                  0,0,2,0,2,1,0,0),
-    ("Glazing", "Water-filled Glass",                                                    1,2,0,2,0,0,0,1),
-    ("Floor Insulation", "Floor Insulation (small-scale)",                               0,0,1,2,0,0,1,2),
-    ("Floor Insulation", "Floor Insulation (medium-scale)",                              0,0,1,2,0,0,1,2),
-    ("Floor Insulation", "Floor Insulation (large-scale)",                               0,0,1,2,0,0,1,2),
-    ("Roof/Loft", "Loft Insulation (small-scale)",                                       0,0,1,2,0,0,1,2),
-    ("Roof/Loft", "Loft Insulation (medium-scale)",                                      0,0,1,2,0,0,1,2),
-    ("Roof/Loft", "Loft Insulation (large-scale)",                                       0,0,1,2,0,0,1,2),
-    ("Roof/Loft", "Draught-proofing (small-scale)",                                      1,0,2,2,0,0,2,2),
-    ("Roof/Loft", "Draught-proofing (medium-scale)",                                     1,0,2,2,0,0,2,2),
-    ("Roof/Loft", "Draught-proofing (large-scale)",                                      1,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Mineral Wool (Blown-in) – small",                      1,0,1,2,0,0,1,2),
-    ("Wall Insulation Material", "Mineral Wool (Blown-in) – medium",                     1,0,1,2,0,0,1,2),
-    ("Wall Insulation Material", "Mineral Wool (Blown-in) – large",                      1,0,1,2,0,0,1,2),
-    ("Wall Insulation Material", "Spray Foam (closed-cell) – small",                     0,0,2,2,0,0,0,1),
-    ("Wall Insulation Material", "Spray Foam (closed-cell) – medium",                    0,0,2,2,0,0,0,1),
-    ("Wall Insulation Material", "Spray Foam (closed-cell) – large",                     0,0,2,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Beads – small",                                    0,0,1,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Beads – medium",                                   0,0,1,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Beads – large",                                    0,0,1,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Boards – small",                                   1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "EPS Boards – medium",                                  1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "EPS Boards – large",                                   1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Phenolic Foam – small",                                1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Phenolic Foam – medium",                               1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Phenolic Foam – large",                                1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Cork – small",                                         0,0,0,1,0,0,2,2),
-    ("Wall Insulation Material", "Cork – medium",                                        0,0,0,1,0,0,2,2),
-    ("Wall Insulation Material", "Cork – large",                                         0,0,0,1,0,0,2,2),
-    ("Wall Insulation Material", "Mineral Wool Boards – small",                          1,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Mineral Wool Boards – medium",                         1,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Mineral Wool Boards – large",                          1,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – small",                       0,0,1,0,0,0,1,1),
-    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – medium",                      0,0,1,0,0,0,1,1),
-    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – large",                       0,0,1,0,0,0,1,1),
-    ("Wall Insulation Material", "Wood Fibre – small",                                   2,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Wood Fibre – medium",                                  2,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Wood Fibre – large",                                   2,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Aerogel Insulation – small",                           1,0,1,2,0,0,1,1),
-    ("Wall Insulation Material", "Aerogel Insulation – medium",                          1,0,1,2,0,0,1,1),
-    ("Wall Insulation Material", "Aerogel Insulation – large",                           1,0,1,2,0,0,1,1),
-    ("Floor Insulation Material", "Mineral Wool Batts",                                  1,0,0,2,0,0,1,2),
-    ("Floor Insulation Material", "Rigid Foam Boards (PIR)",                             1,0,0,1,0,0,0,1),
-    ("Roof/Loft Material", "Mineral Wool/Fibreglass Rolls",                              1,0,2,2,0,0,1,2),
-    ("Roof/Loft Material", "Cellulose (Blown-in)",                                       1,0,1,2,0,0,1,2),
-    ("Roof/Loft Material", "Rigid Boards (PIR/Phenolic)",                                0,0,1,1,0,0,0,1),
+    # Category, Solution, Carbon, Energy, Afford, C1..C8
+    ("Heating Source", "Mechanical Ventilation with Heat Recovery (high efficiency)",   "A","D","A",  2,0,2,2,2,2,1,1),
+    ("Heating Source", "Mechanical Ventilation with Heat Recovery (low efficiency)",    "A","D","B/C",2,0,2,2,2,2,1,1),
+    ("Heating Source", "ASHP (small-scale/low-efficiency)",                             "B","A","B",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "ASHP (medium-scale/medium efficiency)",                         "C","A","B",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "ASHP (large-scale/high efficiency)",                            "C","A","A",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "GSHP (small-scale/low efficiency)",                             "B","A","D",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "GSHP (medium-scale/medium efficiency)",                         "B","A","C",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "GSHP (large-scale/high efficiency)",                            "C","A","B",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "WSHP (small-scale/low efficiency)",                             "B","B","B",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "WSHP (medium-scale/medium efficiency)",                         "C","B","B",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "WSHP (large-scale/high efficiency)",                            "C","B","A",  1,0,2,2,0,1,0,1),
+    ("Heating Source", "District Energy Network Heat Exchanger",                        "E","D","B",  2,1,1,2,1,2,2,1),
+    ("Smart Heating Controls", "Small-scale",                                           "B","E","A",  2,1,2,2,0,2,1,2),
+    ("Smart Heating Controls", "Medium-scale",                                          "B","E","A",  2,1,2,2,0,2,1,2),
+    ("Smart Heating Controls", "Large-scale",                                           "B","E","A",  2,1,2,2,0,2,1,2),
+    ("LED Lighting", "Small-scale",                                                     "C","D","A",  1,1,2,1,1,2,1,1),
+    ("LED Lighting", "Medium-scale",                                                    "C","D","A",  1,1,2,1,1,2,1,1),
+    ("LED Lighting", "Large-scale",                                                     "C","D","A",  1,1,2,1,1,2,1,1),
+    ("Solar PV", "Solar Photovoltaics",                                                 "C","C","A",  1,0,1,2,2,2,1,2),
+    ("Wall Insulation", "External Solid Wall Insulation",                               "","E","",    1,0,1,2,0,0,1,2),
+    ("Wall Insulation", "Internal Solid Wall Insulation",                               "","E","",    1,0,1,2,0,0,1,2),
+    ("Wall Insulation", "Cavity Wall Insulation (small-scale)",                         "","E","",    1,0,1,2,0,0,1,2),
+    ("Wall Insulation", "Cavity Wall Insulation (medium-scale)",                        "","E","",    1,0,1,2,0,0,1,2),
+    ("Wall Insulation", "Cavity Wall Insulation (large-scale)",                         "","E","",    1,0,1,2,0,0,1,2),
+    ("Glazing", "Triple Glazing – Hardwood frames",                                     "E","D","C",  2,2,1,2,2,2,2,2),
+    ("Glazing", "Triple Glazing – uPVC frames",                                         "E","D","C",  2,2,1,2,2,2,2,2),
+    ("Glazing", "Triple Glazing – Aluminium frames",                                    "E","D","C",  2,2,1,2,2,2,2,2),
+    ("Glazing", "Secondary Glazing – Hardwood frames",                                  "E","D","A",  0,0,2,0,2,1,0,0),
+    ("Glazing", "Secondary Glazing – uPVC frames",                                      "E","D","A",  0,0,2,0,2,1,0,0),
+    ("Glazing", "Secondary Glazing – Aluminium frames",                                 "E","D","A",  0,0,2,0,2,1,0,0),
+    ("Glazing", "Water-filled Glass",                                                   "B/C","B","B",1,2,0,2,0,0,0,1),
+    ("Floor Insulation", "Floor Insulation (small-scale)",                              "","E","",    0,0,1,2,0,0,1,2),
+    ("Floor Insulation", "Floor Insulation (medium-scale)",                             "","E","",    0,0,1,2,0,0,1,2),
+    ("Floor Insulation", "Floor Insulation (large-scale)",                              "","E","",    0,0,1,2,0,0,1,2),
+    ("Roof/Loft", "Loft Insulation (small-scale)",                                      "","E","",    0,0,1,2,0,0,1,2),
+    ("Roof/Loft", "Loft Insulation (medium-scale)",                                     "","E","",    0,0,1,2,0,0,1,2),
+    ("Roof/Loft", "Loft Insulation (large-scale)",                                      "","E","",    0,0,1,2,0,0,1,2),
+    ("Roof/Loft", "Draught-proofing (small-scale)",                                     "","E","",    1,0,2,2,0,0,2,2),
+    ("Roof/Loft", "Draught-proofing (medium-scale)",                                    "","E","",    1,0,2,2,0,0,2,2),
+    ("Roof/Loft", "Draught-proofing (large-scale)",                                     "","E","",    1,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Mineral Wool (Blown-in) – small",                     "B","","A",   1,0,1,2,0,0,1,2),
+    ("Wall Insulation Material", "Mineral Wool (Blown-in) – medium",                    "B","","A",   1,0,1,2,0,0,1,2),
+    ("Wall Insulation Material", "Mineral Wool (Blown-in) – large",                     "B","","A",   1,0,1,2,0,0,1,2),
+    ("Wall Insulation Material", "Spray Foam (closed-cell) – small",                    "D","","B",   0,0,2,2,0,0,0,1),
+    ("Wall Insulation Material", "Spray Foam (closed-cell) – medium",                   "C","","A",   0,0,2,2,0,0,0,1),
+    ("Wall Insulation Material", "Spray Foam (closed-cell) – large",                    "C","","A",   0,0,2,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Beads – small",                                   "C","","A",   0,0,1,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Beads – medium",                                  "C","","A",   0,0,1,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Beads – large",                                   "B/C","","A", 0,0,1,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Boards – small",                                  "D","","C",   1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "EPS Boards – medium",                                 "C","","B/C", 1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "EPS Boards – large",                                  "C","","B",   1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Phenolic Foam – small",                               "E","","D",   1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Phenolic Foam – medium",                              "E","","B/C", 1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Phenolic Foam – large",                               "D","","B",   1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Cork – small",                                        "A","","E",   0,0,0,1,0,0,2,2),
+    ("Wall Insulation Material", "Cork – medium",                                       "A","","D",   0,0,0,1,0,0,2,2),
+    ("Wall Insulation Material", "Cork – large",                                        "A","","C",   0,0,0,1,0,0,2,2),
+    ("Wall Insulation Material", "Mineral Wool Boards – small",                         "D","","E",   1,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Mineral Wool Boards – medium",                        "D","","D",   1,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Mineral Wool Boards – large",                         "C","","C",   1,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – small",                      "D","","E",   0,0,1,0,0,0,1,1),
+    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – medium",                     "D","","D",   0,0,1,0,0,0,1,1),
+    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – large",                      "C","","C",   0,0,1,0,0,0,1,1),
+    ("Wall Insulation Material", "Wood Fibre – small",                                  "A","","E",   2,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Wood Fibre – medium",                                 "A","","D",   2,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Wood Fibre – large",                                  "A","","B/C", 2,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Aerogel Insulation – small",                          "E","","E",   1,0,1,2,0,0,1,1),
+    ("Wall Insulation Material", "Aerogel Insulation – medium",                         "E","","D",   1,0,1,2,0,0,1,1),
+    ("Wall Insulation Material", "Aerogel Insulation – large",                          "D","","C",   1,0,1,2,0,0,1,1),
+    ("Floor Insulation Material", "Mineral Wool Batts (Concrete floor)",                "C","","C",   1,0,0,2,0,0,1,2),
+    ("Floor Insulation Material", "Mineral Wool Batts (Suspended timber floor)",        "C","","B",   1,0,0,2,0,0,1,2),
+    ("Floor Insulation Material", "Rigid Foam Boards (PIR)",                            "D","","B",   1,0,0,1,0,0,0,1),
+    ("Roof/Loft Material", "Mineral Wool/Fibreglass Rolls",                             "C","","A",   1,0,2,2,0,0,1,2),
+    ("Roof/Loft Material", "Cellulose (Blown-in)",                                      "B","","A",   1,0,1,2,0,0,1,2),
+    ("Roof/Loft Material", "Rigid Boards (PIR/Phenolic)",                               "D/E","","A", 0,0,1,1,0,0,0,1),
 ]
 
 SOLUTIONS_DF = pd.DataFrame(SOLUTIONS_RAW, columns=[
-    "Category", "Solution", "C1","C2","C3","C4","C5","C6","C7","C8"
+    "Category", "Solution", "CarbonRating", "EnergyRating", "AffordRating",
+    "C1","C2","C3","C4","C5","C6","C7","C8"
 ])
 
 # Archetype comparison metrics (from cluster data)
@@ -386,15 +406,33 @@ def match_Archetype(user_props):
             best_Archetype = cid
     return best_Archetype, best_score
 
+def rating_css(r):
+    """Map a rating string to a CSS class."""
+    mapping = {"A": "rating-A", "B": "rating-B", "B/C": "rating-BC",
+               "C": "rating-C", "D": "rating-D", "D/E": "rating-DE", "E": "rating-E"}
+    return mapping.get(r.strip(), "badge-gray")
+
 def render_solution_card(row, score):
     label, badge_cls = score_label(score)
     priority_cls = "priority-high" if score == 2 else "priority-medium"
+
+    carbon  = row.get("CarbonRating", "")
+    energy  = row.get("EnergyRating", "")
+    afford  = row.get("AffordRating", "")
+
+    carbon_html = f'<span class="rating-pill {rating_css(carbon)}">🌿 Carbon: {carbon}</span>' if carbon else ""
+    energy_html = f'<span class="rating-pill {rating_css(energy)}">⚡ Energy: {energy}</span>'   if energy else ""
+    afford_html = f'<span class="rating-pill {rating_css(afford)}">💷 Afford: {afford}</span>'   if afford else ""
+
     st.markdown(f"""
     <div class="rec-card {priority_cls}">
         <div class="rec-title">{row['Solution']}</div>
         <div class="rec-badges">
             <span class="badge {badge_cls}">{label}</span>
             <span class="badge badge-blue">{row['Category']}</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+            {carbon_html}{energy_html}{afford_html}
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -560,7 +598,9 @@ else:
 
         with tabs[-1]:
             st.dataframe(
-                rec_df[["Category", "Solution", col_id]].rename(columns={col_id: "Score"}).reset_index(drop=True),
+                rec_df[["Category", "Solution", "CarbonRating", "EnergyRating", "AffordRating", col_id]]
+                    .rename(columns={col_id: "Score", "CarbonRating": "Carbon", "EnergyRating": "Energy", "AffordRating": "Affordability"})
+                    .reset_index(drop=True),
                 use_container_width=True,
                 hide_index=True
             )
