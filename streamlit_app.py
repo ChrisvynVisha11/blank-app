@@ -508,12 +508,14 @@ def get_sub_materials(solution_name, scale, rec_df, col_id):
         mlabel, mbadge = score_label(mscore)
         mc_html = f'<span class="rating-pill {rating_css(mc)}" style="font-size:0.65rem;">🌿 {mc}</span>' if mc else ""
         ma_html = f'<span class="rating-pill {rating_css(ma)}" style="font-size:0.65rem;">💷 {ma}</span>' if ma else ""
-        items_html += f"""
-        <div style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:0.5px solid #f0ede6;">
-            <span style="font-size:0.8rem; color:#1a1a2e; flex:1;">{mrow['Solution']}</span>
-            <span class="badge {mbadge}" style="font-size:0.65rem;">{mlabel}</span>
-            {mc_html}{ma_html}
-        </div>"""
+        sol_name = str(mrow["Solution"]).replace("'", "&#39;").replace('"', "&quot;")
+        items_html += (
+            '<div style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:0.5px solid #f0ede6;">'
+            f'<span style="font-size:0.8rem; color:#1a1a2e; flex:1;">{sol_name}</span>'
+            f'<span class="badge {mbadge}" style="font-size:0.65rem;">{mlabel}</span>'
+            f'{mc_html}{ma_html}'
+            '</div>'
+        )
 
     return f"""
     <div style="margin-top:10px; background:#f9f7f4; border-radius:8px; padding:10px 12px;">
