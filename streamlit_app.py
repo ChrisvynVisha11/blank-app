@@ -409,7 +409,7 @@ with st.sidebar:
     st.markdown("---")
 
     if mode == "Use an Archetype (Cluster)":
-        st.markdown("**Select a cluster that best matches your property:**")
+        st.markdown("**Select a archtype that best matches your property:**")
         cluster_options = {f"Cluster {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
         chosen_label = st.selectbox("Archetype", list(cluster_options.keys()))
         chosen_cluster = cluster_options[chosen_label]
