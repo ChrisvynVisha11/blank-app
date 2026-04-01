@@ -442,7 +442,7 @@ def render_solution_card(row, score):
 # ─────────────────────────────────────────────
 
 with st.sidebar:
-    st.markdown("## 🏠 RetroFit")
+    st.markdown("## 🏠 RetroFit Recommendor")
     st.markdown("---")
     mode = st.radio("How would you like to proceed?", ["Use an Archetype", "Enter my own property details"], index=0)
     st.markdown("---")
