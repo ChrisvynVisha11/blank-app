@@ -858,35 +858,20 @@ else:
         <span style="color:#b45309;font-weight:600;"> 1 = 2nd Best Solution</span> ·
         0 = Not applicable (hidden)
     </div>
-    <div style="font-size:0.78rem;color:#3d3d3d;font-weight:600;margin-bottom:0.5rem;">Rating Legend</div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:0.75rem;">
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-            <span style="width:14px;height:14px;border-radius:4px;background:#d8f3dc;display:inline-block;border:1px solid #b7e4c7;"></span>
-            <span style="color:#1b4332;font-weight:700;">A</span><span style="color:#6b7280;">Best</span>
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-            <span style="width:14px;height:14px;border-radius:4px;background:#dbeafe;display:inline-block;border:1px solid #93c5fd;"></span>
-            <span style="color:#1e3a5f;font-weight:700;">B</span><span style="color:#6b7280;">Good</span>
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-            <span style="width:14px;height:14px;border-radius:4px;background:#e0e7ff;display:inline-block;border:1px solid #a5b4fc;"></span>
-            <span style="color:#3730a3;font-weight:700;">B/C</span><span style="color:#6b7280;">Above average</span>
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-            <span style="width:14px;height:14px;border-radius:4px;background:#fef9c3;display:inline-block;border:1px solid #fde047;"></span>
-            <span style="color:#713f12;font-weight:700;">C</span><span style="color:#6b7280;">Average</span>
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-            <span style="width:14px;height:14px;border-radius:4px;background:#fed7aa;display:inline-block;border:1px solid #fb923c;"></span>
-            <span style="color:#7c2d12;font-weight:700;">D</span><span style="color:#6b7280;">Below average</span>
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-            <span style="width:14px;height:14px;border-radius:4px;background:#fecaca;display:inline-block;border:1px solid #f87171;"></span>
-            <span style="color:#7f1d1d;font-weight:700;">D/E</span><span style="color:#6b7280;">Poor</span>
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;">
-            <span style="width:14px;height:14px;border-radius:4px;background:#f3e8ff;display:inline-block;border:1px solid #d8b4fe;"></span>
-            <span style="color:#581c87;font-weight:700;">E</span><span style="color:#6b7280;">Worst</span>
-        </span>
+    <div style="font-size:0.78rem;color:#3d3d3d;font-weight:600;margin-bottom:0.5rem;">Rating Icons</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;">
+        <span class="rating-pill rating-A">🌿 Carbon Rating</span>
+        <span class="rating-pill rating-B">⚡ Energy Rating</span>
+        <span class="rating-pill rating-C">💷 Affordability Rating</span>
+    </div>
+    <div style="font-size:0.78rem;color:#3d3d3d;font-weight:600;margin-bottom:0.6rem;">Rating Scale</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:0.4rem;">
+        <span class="rating-pill rating-A">A — Best</span>
+        <span class="rating-pill rating-B">B — Good</span>
+        <span class="rating-pill rating-BC">B/C — Above average</span>
+        <span class="rating-pill rating-C">C — Average</span>
+        <span class="rating-pill rating-D">D — Below average</span>
+        <span class="rating-pill rating-DE">D/E — Poor</span>
+        <span class="rating-pill rating-E">E — Worst</span>
     </div>
     """, unsafe_allow_html=True)
