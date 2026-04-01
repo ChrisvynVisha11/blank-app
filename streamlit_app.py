@@ -322,6 +322,18 @@ SOLUTIONS_DF = pd.DataFrame(SOLUTIONS_RAW, columns=[
     "Category", "Solution", "C1","C2","C3","C4","C5","C6","C7","C8"
 ])
 
+# Archetype comparison metrics (from cluster data)
+ARCHETYPE_METRICS = {
+    1: {"co2": 3.95, "gap": 14.49, "cost": 12.29},
+    2: {"co2": 2.43, "gap": 15.06, "cost": 10.96},
+    3: {"co2": 3.48, "gap": 14.52, "cost": 12.07},
+    4: {"co2": 4.54, "gap": 19.77, "cost": 13.90},
+    5: {"co2": 4.59, "gap": 3.99,  "cost": 10.62},
+    6: {"co2": 3.67, "gap": 16.56, "cost": 11.39},
+    7: {"co2": 3.43, "gap": 16.28, "cost": 11.45},
+    8: {"co2": 9.04, "gap": 39.82, "cost": 26.08},
+}
+
 # ─────────────────────────────────────────────
 # HELPERS
 # ─────────────────────────────────────────────
@@ -556,6 +568,67 @@ else:
                 use_container_width=True,
                 hide_index=True
             )
+
+    st.markdown("---")
+    st.markdown('<div class="section-header">📊 How You Compare to Other Archetypes</div>', unsafe_allow_html=True)
+
+    my = ARCHETYPE_METRICS[resolved]
+    all_co2  = [v["co2"]  for v in ARCHETYPE_METRICS.values()]
+    all_gap  = [v["gap"]  for v in ARCHETYPE_METRICS.values()]
+    all_cost = [v["cost"] for v in ARCHETYPE_METRICS.values()]
+    avg_co2  = round(sum(all_co2)  / len(all_co2),  2)
+    avg_gap  = round(sum(all_gap)  / len(all_gap),  2)
+    avg_cost = round(sum(all_cost) / len(all_cost), 2)
+
+    # Build summary text
+    def compare_text(val, avg, unit, label, higher_is_worse=True):
+        diff = round(abs(val - avg), 2)
+        if abs(val - avg) < avg * 0.05:
+            return f"Your {label} ({val} {unit}) is <strong>close to the average</strong> ({avg} {unit}) across all archetypes."
+        elif (val > avg) == higher_is_worse:
+            return f"Your {label} ({val} {unit}) is <strong style='color:#b45309;'>above average</strong> — the average is {avg} {unit}. There is meaningful room for improvement here."
+        else:
+            return f"Your {label} ({val} {unit}) is <strong style='color:#2d6a4f;'>below average</strong> — the average is {avg} {unit}. You are performing well on this metric."
+
+    co2_text  = compare_text(my["co2"],  avg_co2,  "kgCO₂e/m²", "CO₂ emissions")
+    gap_text  = compare_text(my["gap"],  avg_gap,  "",           "efficiency gap")
+    cost_text = compare_text(my["cost"], avg_cost, "£/m²",       "energy cost/area")
+
+    # Metric cards + gauges as HTML
+    metrics_html = f"""
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:1.2rem;">
+        <div style="flex:1; min-width:160px; background:#f0faf4; border:1px solid #b7e4c7; border-radius:10px; padding:14px 16px;">
+            <div style="font-size:0.75rem; color:#2d6a4f; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">CO₂ Emissions</div>
+            <div style="font-size:1.6rem; font-weight:600; color:#1a1a2e;">{my['co2']}</div>
+            <div style="font-size:0.78rem; color:#6b7280;">kgCO₂e/m² · avg {avg_co2}</div>
+            <div style="margin-top:8px; background:#e5e0d5; border-radius:100px; height:6px;">
+                <div style="width:{min(100, round(my['co2'] / max(all_co2) * 100))}%; background:#2d6a4f; height:6px; border-radius:100px;"></div>
+            </div>
+        </div>
+        <div style="flex:1; min-width:160px; background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:14px 16px;">
+            <div style="font-size:0.75rem; color:#b45309; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Efficiency Gap</div>
+            <div style="font-size:1.6rem; font-weight:600; color:#1a1a2e;">{my['gap']}</div>
+            <div style="font-size:0.78rem; color:#6b7280;">score · avg {avg_gap}</div>
+            <div style="margin-top:8px; background:#e5e0d5; border-radius:100px; height:6px;">
+                <div style="width:{min(100, round(my['gap'] / max(all_gap) * 100))}%; background:#e9c46a; height:6px; border-radius:100px;"></div>
+            </div>
+        </div>
+        <div style="flex:1; min-width:160px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:14px 16px;">
+            <div style="font-size:0.75rem; color:#1e3a5f; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Energy Cost / Area</div>
+            <div style="font-size:1.6rem; font-weight:600; color:#1a1a2e;">£{my['cost']}</div>
+            <div style="font-size:0.78rem; color:#6b7280;">/m² · avg £{avg_cost}</div>
+            <div style="margin-top:8px; background:#e5e0d5; border-radius:100px; height:6px;">
+                <div style="width:{min(100, round(my['cost'] / max(all_cost) * 100))}%; background:#378add; height:6px; border-radius:100px;"></div>
+            </div>
+        </div>
+    </div>
+    <div style="background:#f9f7f4; border:1px solid #e5e0d5; border-radius:10px; padding:1rem 1.2rem; font-size:0.85rem; color:#3d3d3d; line-height:1.8;">
+        <div style="margin-bottom:0.4rem;">🌿 {co2_text}</div>
+        <div style="margin-bottom:0.4rem;">⚡ {gap_text}</div>
+        <div>💷 {cost_text}</div>
+    </div>
+    """
+    st.markdown(metrics_html, unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("""
