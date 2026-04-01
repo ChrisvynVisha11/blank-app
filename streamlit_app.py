@@ -448,13 +448,13 @@ with st.sidebar:
 st.markdown("""
 <div class="hero-banner">
     <h1>🏠 RetroFit Recommender</h1>
-    <p>Provides retrofit solutions for UK residential properties matched to your archetype or property characteristics.</p>
+    <p>Tailored retrofit solutions for UK residential properties — matched to your archetype or property characteristics.</p>
 </div>
 """, unsafe_allow_html=True)
 
 if not run:
     st.markdown('<div class="section-header">About the Archetypes</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
@@ -494,7 +494,7 @@ else:
     cdata  = CLUSTERS[resolved]
     col_id = f"C{resolved}"
 
-    st.markdown(f'<div class="section-header">{"📌 Selected" if match_method=="archetype" else "🎯 Best Matched"} Archetype: {cdata["label"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">{"📌 Selected" if match_method=="archetype" else "🎯 Best Matched"} Archetype {resolved}</div>', unsafe_allow_html=True)
 
     if match_method == "matched":
         st.markdown(f"""
@@ -582,9 +582,9 @@ else:
         if abs(val - avg) < avg * 0.05:
             return f"Your {label} ({val} {unit}) is <strong>close to the average</strong> ({avg} {unit}) across all archetypes."
         elif (val > avg) == higher_is_worse:
-            return f"Your {label} ({val} {unit}) is <strong style='color:#b45309;'>above average</strong>; the average is {avg} {unit}. There is meaningful room for improvement here."
+            return f"Your {label} ({val} {unit}) is <strong style='color:#b45309;'>above average</strong> — the average is {avg} {unit}. There is meaningful room for improvement here."
         else:
-            return f"Your {label} ({val} {unit}) is <strong style='color:#2d6a4f;'>below average</strong>; the average is {avg} {unit}. You are performing well on this metric."
+            return f"Your {label} ({val} {unit}) is <strong style='color:#2d6a4f;'>below average</strong> — the average is {avg} {unit}. You are performing well on this metric."
 
     co2_text  = compare_text(my["co2"],  avg_co2,  "kgCO₂e/m²", "CO₂ emissions")
     gap_text  = compare_text(my["gap"],  avg_gap,  "",           "efficiency gap")
