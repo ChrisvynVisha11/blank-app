@@ -388,7 +388,8 @@ def filter_by_wall_type(df, wall_type):
     """
     wt = wall_type.lower() if wall_type else ""
 
-    # Solutions only applicable to SOLID walls
+    if wt in ("", "not sure", "other", "timber", "system"):
+        return df  # no wall filtering
     SOLID_ONLY = [
         "external solid wall insulation",
         "internal solid wall insulation",
@@ -450,7 +451,13 @@ def match_archetype(user_props):
     best_archetype = None
     best_score = -1
     for cid, cdata in CLUSTERS.items():
-        score = sum(1 for f in fields if cdata.get(f, "").lower() == user_props.get(f, "").lower())
+        score = 0
+        for f in fields:
+            user_val = user_props.get(f, "").lower()
+            if user_val in ("", "not sure"):
+                continue  # skip — don't penalise or reward
+            if cdata.get(f, "").lower() == user_val:
+                score += 1
         fa_diff = abs(cdata["floor_area"] - user_props.get("floor_area", 80)) / 200
         score -= fa_diff * 0.5
         if score > best_score:
@@ -463,11 +470,61 @@ def rating_css(r):
                "C": "rating-C", "D": "rating-D", "D/E": "rating-DE", "E": "rating-E"}
     return mapping.get(r.strip(), "badge-gray")
 
-def render_solution_card(row, score):
+# Material sub-options for solid wall insulation types
+EXTERNAL_SOLID_MATERIALS = [
+    "EPS Boards", "Phenolic Foam", "Cork", "Mineral Wool (small", "Mineral Wool (medium", "Mineral Wool (large"
+]
+INTERNAL_SOLID_MATERIALS = [
+    "PIR/Phenolic/EPS Board", "Wood Fibre", "Aerogel Insulation"
+]
+
+def get_sub_materials(solution_name, scale, rec_df, col_id):
+    """Return HTML list of relevant material sub-options from the recommendations df."""
+    sol_lower = solution_name.lower()
+    if "external solid" in sol_lower:
+        keywords = [m.lower() for m in EXTERNAL_SOLID_MATERIALS]
+    elif "internal solid" in sol_lower:
+        keywords = [m.lower() for m in INTERNAL_SOLID_MATERIALS]
+    else:
+        return ""
+
+    # Filter materials from Wall Insulation Material category matching the scale
+    mat_df = rec_df[rec_df["Category"] == "Wall Insulation Material"].copy()
+    if scale:
+        mat_df = filter_by_scale(mat_df, scale)
+
+    matched = mat_df[mat_df["Solution"].str.lower().apply(
+        lambda s: any(k in s for k in keywords)
+    )]
+
+    if matched.empty:
+        return ""
+
+    items_html = ""
+    for _, mrow in matched.iterrows():
+        mc = mrow["CarbonRating"] if mrow["CarbonRating"] else ""
+        ma = mrow["AffordRating"] if mrow["AffordRating"] else ""
+        mscore = mrow[col_id]
+        mlabel, mbadge = score_label(mscore)
+        mc_html = f'<span class="rating-pill {rating_css(mc)}" style="font-size:0.65rem;">🌿 {mc}</span>' if mc else ""
+        ma_html = f'<span class="rating-pill {rating_css(ma)}" style="font-size:0.65rem;">💷 {ma}</span>' if ma else ""
+        items_html += f"""
+        <div style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:0.5px solid #f0ede6;">
+            <span style="font-size:0.8rem; color:#1a1a2e; flex:1;">{mrow['Solution']}</span>
+            <span class="badge {mbadge}" style="font-size:0.65rem;">{mlabel}</span>
+            {mc_html}{ma_html}
+        </div>"""
+
+    return f"""
+    <div style="margin-top:10px; background:#f9f7f4; border-radius:8px; padding:10px 12px;">
+        <div style="font-size:0.72rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">Recommended Materials</div>
+        {items_html}
+    </div>"""
+
+def render_solution_card(row, score, scale=None, rec_df=None, col_id=None):
     label, badge_cls = score_label(score)
     priority_cls = "priority-high" if score == 2 else "priority-medium"
 
-    # Use bracket indexing for pandas Series
     carbon = row["CarbonRating"] if row["CarbonRating"] else ""
     energy = row["EnergyRating"] if row["EnergyRating"] else ""
     afford = row["AffordRating"] if row["AffordRating"] else ""
@@ -475,6 +532,10 @@ def render_solution_card(row, score):
     carbon_html = f'<span class="rating-pill {rating_css(carbon)}">🌿 Carbon: {carbon}</span>' if carbon else ""
     energy_html = f'<span class="rating-pill {rating_css(energy)}">⚡ Energy: {energy}</span>'   if energy else ""
     afford_html = f'<span class="rating-pill {rating_css(afford)}">💷 Afford: {afford}</span>'   if afford else ""
+
+    sub_html = ""
+    if rec_df is not None and col_id is not None:
+        sub_html = get_sub_materials(row["Solution"], scale, rec_df, col_id)
 
     st.markdown(f"""
     <div class="rec-card {priority_cls}">
@@ -486,6 +547,7 @@ def render_solution_card(row, score):
         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
             {carbon_html}{energy_html}{afford_html}
         </div>
+        {sub_html}
     </div>
     """, unsafe_allow_html=True)
 
@@ -519,11 +581,11 @@ with st.sidebar:
     else:
         st.markdown("**Your property details:**")
         prop_type   = st.selectbox("Property Type", ["House", "Flat", "Bungalow", "Maisonette"])
-        wall_ins    = st.selectbox("Wall Insulation Status", ["None", "Partial", "Full"])
-        wall_type   = st.selectbox("Wall Type", ["Cavity", "Solid", "Timber", "System", "Other"])
+        wall_ins    = st.selectbox("Wall Insulation Status", ["Not sure", "None", "Partial", "Full"])
+        wall_type   = st.selectbox("Wall Type", ["Not sure", "Cavity", "Solid", "Timber", "System", "Other"])
         built_form  = st.selectbox("Built Form", ["Detached", "Semi-Detached", "End Terrace", "Mid-Terrace", "Enclosed Mid-Terrace", "Enclosed End Terrace"])
-        tenure      = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rental (Social)", "Rented (Private)", "Rented (Social)"])
-        const_age   = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
+        tenure      = st.selectbox("Tenure", ["Not sure", "Owner Occupied", "Rental (Private)", "Rental (Social)", "Rented (Private)", "Rented (Social)"])
+        const_age   = st.selectbox("Construction Age", ["Not sure", "Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
         floor_area  = st.slider("Total Floor Area (m²)", 20, 400, 80)
         ask_floor   = st.radio("Do you want floor-specific recommendations?", ["Yes", "No"], index=1, key="ask_floor_custom")
         floor_type  = st.selectbox("Floor Type", ["Concrete", "Suspended Timber"], key="ft_custom") if ask_floor == "Yes" else None
@@ -645,11 +707,11 @@ else:
                 if not cat_strong.empty:
                     st.markdown('<p style="color:#2d6a4f;font-weight:700;font-size:1rem;margin-bottom:0.5rem;">🟢 Best Solutions</p>', unsafe_allow_html=True)
                     for _, row in cat_strong.iterrows():
-                        render_solution_card(row, 2)
+                        render_solution_card(row, 2, scale=scale, rec_df=rec_df, col_id=col_id)
                 if not cat_consider.empty:
                     st.markdown('<p style="color:#b45309;font-weight:700;font-size:1rem;margin-bottom:0.5rem;">🟡 2nd Best Solutions</p>', unsafe_allow_html=True)
                     for _, row in cat_consider.iterrows():
-                        render_solution_card(row, 1)
+                        render_solution_card(row, 1, scale=scale, rec_df=rec_df, col_id=col_id)
 
         with tabs[-1]:
             st.dataframe(
