@@ -426,6 +426,7 @@ def filter_by_wall_type(df, wall_type, wall_insulation=""):
 def filter_by_floor_type(df, floor_type):
     if df.empty or "Solution" not in df.columns:
         return df
+    ft = floor_type.lower() if floor_type else ""
     def row_matches(solution_name):
         s = solution_name.lower()
         if "mineral wool batts" not in s:
