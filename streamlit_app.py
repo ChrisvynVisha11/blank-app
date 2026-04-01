@@ -620,7 +620,7 @@ st.markdown("""
 <div class="hero-banner">
     <h1>🏠 Retrofit Recommender</h1>
     <p>Provides retrofit solutions for UK residential properties matched to your archetype or property characteristics.</p>
-    <p style="margin-top:0.6rem;font-size:0.8rem;color:#a8d5be;letter-spacing:0.04em;">by Sheffield WattWatchers</p>
+    <p style="margin-top:0.6rem;font-size:0.8rem;color:#a8d5be;letter-spacing:0.04em;">by Sheffield Watt Watchers</p>
 </div>
 """, unsafe_allow_html=True)
 
