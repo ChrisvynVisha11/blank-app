@@ -479,13 +479,13 @@ with st.sidebar:
 st.markdown("""
 <div class="hero-banner">
     <h1>🏠 RetroFit Recommender</h1>
-    <p>Tailored retrofit solutions for UK residential properties — matched to your archetype or property characteristics.</p>
+    <p>Provides retrofit solutions for UK residential properties matched to your archetype or property characteristics.</p>
 </div>
 """, unsafe_allow_html=True)
 
 if not run:
     st.markdown('<div class="section-header">About the Archetypes</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
@@ -530,18 +530,9 @@ else:
     if match_method == "matched":
         st.markdown(f"""
         <div class="info-box">
-            Your property characteristics have been matched to <strong>Archetype {resolved}</strong>.
-            Review the archetype profile below and refine your selections in the sidebar if needed.
+            Your property characteristics have been matched to <strong>Archetype {resolved}</strong>. You can refine your selections in the sidebar if needed.
         </div>
         """, unsafe_allow_html=True)
-
-    st.markdown(f"""
-    <div style="margin-top:0.5rem;margin-bottom:1rem;">
-        <span class="stat-pill">Floor Area: ~{cdata['floor_area']} m²</span>
-        <span class="stat-pill">IMD Decile: {cdata['imd_decile']}</span>
-        <span class="stat-pill">Avg Income: £{cdata['income']:,}/yr</span>
-    </div>
-    """, unsafe_allow_html=True)
 
     rec_df = get_recommendations_for_archetype(resolved, min_score_val)
     rec_df = rec_df[rec_df["Category"].isin(category_filter)]
