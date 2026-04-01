@@ -107,8 +107,7 @@ h1, h2, h3 {
     font-size: 1.05rem;
 }
 
-/* Archetype card — no hover effect */
-.Archetype-card {
+.archetype-card {
     background: white;
     border-radius: 12px;
     padding: 1.2rem 1.4rem;
@@ -116,13 +115,13 @@ h1, h2, h3 {
     border: 2px solid var(--border);
     cursor: default;
 }
-.Archetype-title {
+.archetype-title {
     font-family: 'DM Serif Display', serif;
     font-size: 1.05rem;
     color: var(--text);
     margin-bottom: 0.3rem;
 }
-.Archetype-meta {
+.archetype-meta {
     font-size: 0.78rem;
     color: var(--muted);
     display: flex;
@@ -243,14 +242,14 @@ h1, h2, h3 {
 # ─────────────────────────────────────────────
 
 CLUSTERS = {
-    1: {"label": "Archetype 1 ", "property_type": "House", "wall_insulation": "Partial", "wall_type": "System",  "built_form": "Detached",      "tenure": "Rental (Private)",  "construction_age": "1900-1949", "floor_area": 77.7,  "imd_decile": 2, "income": 34951},
-    2: {"label": "Archetype 2 ", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Semi-Detached", "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 134.6, "imd_decile": 0, "income": 47848},
-    3: {"label": "Archetype 3 ", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Rented (Private)",  "construction_age": "1900-1949", "floor_area": 46.7,  "imd_decile": 2, "income": 30876},
-    4: {"label": "Archetype 4 ", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Mid-Terrace",   "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 47.6,  "imd_decile": 3, "income": 38518},
-    5: {"label": "Archetype 5 ", "property_type": "Flat",  "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "End Terrace",   "tenure": "Rental (Social)",   "construction_age": "1950-2002", "floor_area": 46.9,  "imd_decile": 0, "income": 32923},
-    6: {"label": "Archetype 6 ", "property_type": "House", "wall_insulation": "None",    "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 23.3,  "imd_decile": 1, "income": 33125},
-    7: {"label": "Archetype 7 ", "property_type": "House", "wall_insulation": "Full",    "wall_type": "Cavity",  "built_form": "Semi-Detached", "tenure": "Owner Occupied",    "construction_age": "1950-2002", "floor_area": 44.8,  "imd_decile": 1, "income": 33804},
-    8: {"label": "Archetype 8 ", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
+    1: {"label": "Archetype 1", "property_type": "House", "wall_insulation": "Partial", "wall_type": "System",  "built_form": "Detached",      "tenure": "Rental (Private)",  "construction_age": "1900-1949", "floor_area": 77.7,  "imd_decile": 2, "income": 34951},
+    2: {"label": "Archetype 2", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Semi-Detached", "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 134.6, "imd_decile": 0, "income": 47848},
+    3: {"label": "Archetype 3", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Rented (Private)",  "construction_age": "1900-1949", "floor_area": 46.7,  "imd_decile": 2, "income": 30876},
+    4: {"label": "Archetype 4", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Mid-Terrace",   "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 47.6,  "imd_decile": 3, "income": 38518},
+    5: {"label": "Archetype 5", "property_type": "Flat",  "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "End Terrace",   "tenure": "Rental (Social)",   "construction_age": "1950-2002", "floor_area": 46.9,  "imd_decile": 0, "income": 32923},
+    6: {"label": "Archetype 6", "property_type": "House", "wall_insulation": "None",    "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 23.3,  "imd_decile": 1, "income": 33125},
+    7: {"label": "Archetype 7", "property_type": "House", "wall_insulation": "Full",    "wall_type": "Cavity",  "built_form": "Semi-Detached", "tenure": "Owner Occupied",    "construction_age": "1950-2002", "floor_area": 44.8,  "imd_decile": 1, "income": 33804},
+    8: {"label": "Archetype 8", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
 }
 
 SOLUTIONS_RAW = [
@@ -338,8 +337,7 @@ SOLUTIONS_DF = pd.DataFrame(SOLUTIONS_RAW, columns=[
     "C1","C2","C3","C4","C5","C6","C7","C8"
 ])
 
-# Archetype comparison metrics (from cluster data)
-Archetype_METRICS = {
+ARCHETYPE_METRICS = {
     1: {"co2": 3.95, "gap": 14.49, "cost": 12.29},
     2: {"co2": 2.43, "gap": 15.06, "cost": 10.96},
     3: {"co2": 3.48, "gap": 14.52, "cost": 12.07},
@@ -360,7 +358,6 @@ def score_label(s):
     return ("Not Applicable", "badge-red")
 
 def get_scale_for_built_form(built_form):
-    """Return the scale keyword to filter solutions by, based on built form."""
     bf = built_form.lower()
     if bf == "detached":
         return "small"
@@ -368,14 +365,9 @@ def get_scale_for_built_form(built_form):
         return "medium"
     elif bf in ["end terrace", "enclosed end terrace"]:
         return "large"
-    return None  # No scale filtering for flats / unknown
+    return None
 
 def filter_by_scale(df, scale):
-    """
-    Keep rows that either:
-      - contain the matching scale keyword in the solution name, OR
-      - have no scale keyword at all (e.g. single-option solutions like Solar PV, glazing types)
-    """
     if scale is None:
         return df
     scale_keywords = ["small", "medium", "large"]
@@ -383,19 +375,19 @@ def filter_by_scale(df, scale):
         name_lower = solution_name.lower()
         has_any_scale = any(kw in name_lower for kw in scale_keywords)
         if not has_any_scale:
-            return True   # no scale in name → always include
+            return True
         return scale in name_lower
     return df[df["Solution"].apply(row_matches)]
 
-def get_recommendations_for_Archetype(Archetype_id, min_score=1):
-    col = f"C{Archetype_id}"
+def get_recommendations_for_archetype(archetype_id, min_score=1):
+    col = f"C{archetype_id}"
     df = SOLUTIONS_DF[(SOLUTIONS_DF[col] >= 1) & (SOLUTIONS_DF[col] >= min_score)].copy()
     df = df.sort_values(col, ascending=False)
     return df
 
-def match_Archetype(user_props):
+def match_archetype(user_props):
     fields = ["property_type", "wall_insulation", "wall_type", "built_form", "tenure", "construction_age"]
-    best_Archetype = None
+    best_archetype = None
     best_score = -1
     for cid, cdata in CLUSTERS.items():
         score = sum(1 for f in fields if cdata.get(f, "").lower() == user_props.get(f, "").lower())
@@ -403,11 +395,10 @@ def match_Archetype(user_props):
         score -= fa_diff * 0.5
         if score > best_score:
             best_score = score
-            best_Archetype = cid
-    return best_Archetype, best_score
+            best_archetype = cid
+    return best_archetype, best_score
 
 def rating_css(r):
-    """Map a rating string to a CSS class."""
     mapping = {"A": "rating-A", "B": "rating-B", "B/C": "rating-BC",
                "C": "rating-C", "D": "rating-D", "D/E": "rating-DE", "E": "rating-E"}
     return mapping.get(r.strip(), "badge-gray")
@@ -416,9 +407,10 @@ def render_solution_card(row, score):
     label, badge_cls = score_label(score)
     priority_cls = "priority-high" if score == 2 else "priority-medium"
 
-    carbon  = row.get("CarbonRating", "")
-    energy  = row.get("EnergyRating", "")
-    afford  = row.get("AffordRating", "")
+    # Use bracket indexing for pandas Series
+    carbon = row["CarbonRating"] if row["CarbonRating"] else ""
+    energy = row["EnergyRating"] if row["EnergyRating"] else ""
+    afford = row["AffordRating"] if row["AffordRating"] else ""
 
     carbon_html = f'<span class="rating-pill {rating_css(carbon)}">🌿 Carbon: {carbon}</span>' if carbon else ""
     energy_html = f'<span class="rating-pill {rating_css(energy)}">⚡ Energy: {energy}</span>'   if energy else ""
@@ -444,14 +436,15 @@ def render_solution_card(row, score):
 with st.sidebar:
     st.markdown("## How would you like to proceed?")
     st.markdown("---")
-    mode = st.radio("Here are your options :", ["Use an Archetype", "Enter my own property details"], index=0)
+    mode = st.radio("Here are your options:", ["Use an Archetype", "Enter my own property details"], index=0)
     st.markdown("---")
 
     if mode == "Use an Archetype":
-        st.markdown("**Select an Archetype that best matches your property:**")
-        Archetype_options = {f"Archetype {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
-        chosen_label = st.selectbox("Archetype", list(Archetype_options.keys()))
-        chosen_Archetype = Archetype_options[chosen_label]
+        st.markdown("**Select an archetype that best matches your property:**")
+        # Use label directly — no '–' split needed
+        archetype_options = {cdata["label"]: cid for cid, cdata in CLUSTERS.items()}
+        chosen_label = st.selectbox("Archetype", list(archetype_options.keys()))
+        chosen_archetype = archetype_options[chosen_label]
         min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
         category_filter = st.multiselect(
@@ -486,21 +479,21 @@ with st.sidebar:
 st.markdown("""
 <div class="hero-banner">
     <h1>🏠 RetroFit Recommender</h1>
-    <p>Tailored retrofit solutions for UK residential properties — matched to your Archetype or property characteristics.</p>
+    <p>Tailored retrofit solutions for UK residential properties — matched to your archetype or property characteristics.</p>
 </div>
 """, unsafe_allow_html=True)
 
 if not run:
     st.markdown('<div class="section-header">About the Archetypes</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each Archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
         with cols[i % 4]:
             st.markdown(f"""
-            <div class="Archetype-card">
-                <div class="Archetype-title">Archetype {cid}</div>
-                <div class="Archetype-meta">
+            <div class="archetype-card">
+                <div class="archetype-title">Archetype {cid}</div>
+                <div class="archetype-meta">
                     <span class="tag">{cdata['property_type']}</span>
                     <span class="tag">{cdata['built_form']}</span>
                     <span class="tag">{cdata['construction_age']}</span>
@@ -514,31 +507,31 @@ if not run:
 
 else:
     if mode == "Use an Archetype":
-        resolved = chosen_Archetype
-        match_method = "Archetype"
+        resolved = chosen_archetype
+        match_method = "archetype"
     else:
         user_props = {
-            "property_type":     prop_type,
-            "wall_insulation":   wall_ins,
-            "wall_type":         wall_type,
-            "built_form":        built_form,
-            "tenure":            tenure,
-            "construction_age":  const_age,
-            "floor_area":        float(floor_area),
+            "property_type":    prop_type,
+            "wall_insulation":  wall_ins,
+            "wall_type":        wall_type,
+            "built_form":       built_form,
+            "tenure":           tenure,
+            "construction_age": const_age,
+            "floor_area":       float(floor_area),
         }
-        resolved, _ = match_Archetype(user_props)
+        resolved, _ = match_archetype(user_props)
         match_method = "matched"
 
     cdata  = CLUSTERS[resolved]
     col_id = f"C{resolved}"
 
-    st.markdown(f'<div class="section-header">{"📌 Selected" if match_method=="Archetype" else "🎯 Best Matched"} Archetype {resolved}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">{"📌 Selected" if match_method=="archetype" else "🎯 Best Matched"} Archetype {resolved}</div>', unsafe_allow_html=True)
 
     if match_method == "matched":
         st.markdown(f"""
         <div class="info-box">
             Your property characteristics have been matched to <strong>Archetype {resolved}</strong>.
-            Review the Archetype profile below and refine your selections in the sidebar if needed.
+            Review the archetype profile below and refine your selections in the sidebar if needed.
         </div>
         """, unsafe_allow_html=True)
 
@@ -550,10 +543,9 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-    rec_df = get_recommendations_for_Archetype(resolved, min_score_val)
+    rec_df = get_recommendations_for_archetype(resolved, min_score_val)
     rec_df = rec_df[rec_df["Category"].isin(category_filter)]
 
-    # Scale filtering based on built form
     built_form_resolved = cdata["built_form"]
     scale = get_scale_for_built_form(built_form_resolved)
     rec_df = filter_by_scale(rec_df, scale)
@@ -567,9 +559,9 @@ else:
     if rec_df.empty:
         st.info("No recommendations found for the selected filters. Try lowering the minimum score threshold.")
     else:
-        strong  = rec_df[rec_df[col_id] == 2]
+        strong   = rec_df[rec_df[col_id] == 2]
         consider = rec_df[rec_df[col_id] == 1]
-        total   = len(rec_df)
+        total    = len(rec_df)
 
         st.markdown(f"""
         <div style="margin-bottom:1rem;">
@@ -584,8 +576,8 @@ else:
 
         for i, cat in enumerate(categories):
             with tabs[i]:
-                cat_df      = rec_df[rec_df["Category"] == cat]
-                cat_strong  = cat_df[cat_df[col_id] == 2]
+                cat_df       = rec_df[rec_df["Category"] == cat]
+                cat_strong   = cat_df[cat_df[col_id] == 2]
                 cat_consider = cat_df[cat_df[col_id] == 1]
                 if not cat_strong.empty:
                     st.markdown('<p style="color:#2d6a4f;font-weight:700;font-size:1rem;margin-bottom:0.5rem;">🟢 Best Solutions</p>', unsafe_allow_html=True)
@@ -608,19 +600,17 @@ else:
     st.markdown("---")
     st.markdown('<div class="section-header">📊 How You Compare to Other Archetypes</div>', unsafe_allow_html=True)
 
-    my = Archetype_METRICS[resolved]
-    all_co2  = [v["co2"]  for v in Archetype_METRICS.values()]
-    all_gap  = [v["gap"]  for v in Archetype_METRICS.values()]
-    all_cost = [v["cost"] for v in Archetype_METRICS.values()]
+    my       = ARCHETYPE_METRICS[resolved]
+    all_co2  = [v["co2"]  for v in ARCHETYPE_METRICS.values()]
+    all_gap  = [v["gap"]  for v in ARCHETYPE_METRICS.values()]
+    all_cost = [v["cost"] for v in ARCHETYPE_METRICS.values()]
     avg_co2  = round(sum(all_co2)  / len(all_co2),  2)
     avg_gap  = round(sum(all_gap)  / len(all_gap),  2)
     avg_cost = round(sum(all_cost) / len(all_cost), 2)
 
-    # Build summary text
     def compare_text(val, avg, unit, label, higher_is_worse=True):
-        diff = round(abs(val - avg), 2)
         if abs(val - avg) < avg * 0.05:
-            return f"Your {label} ({val} {unit}) is <strong>close to the average</strong> ({avg} {unit}) across all Archetypes."
+            return f"Your {label} ({val} {unit}) is <strong>close to the average</strong> ({avg} {unit}) across all archetypes."
         elif (val > avg) == higher_is_worse:
             return f"Your {label} ({val} {unit}) is <strong style='color:#b45309;'>above average</strong> — the average is {avg} {unit}. There is meaningful room for improvement here."
         else:
@@ -630,7 +620,6 @@ else:
     gap_text  = compare_text(my["gap"],  avg_gap,  "",           "efficiency gap")
     cost_text = compare_text(my["cost"], avg_cost, "£/m²",       "energy cost/area")
 
-    # Metric cards + gauges as HTML
     metrics_html = f"""
     <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:1.2rem;">
         <div style="flex:1; min-width:160px; background:#f0faf4; border:1px solid #b7e4c7; border-radius:10px; padding:14px 16px;">
@@ -670,7 +659,7 @@ else:
     st.markdown("""
     <div style="font-size:0.78rem;color:#6b7280;">
         <strong>Score guide:</strong>
-        <span style="color:#2d6a4f;font-weight:600;">2 = Best Solution for this Archetype</span> ·
+        <span style="color:#2d6a4f;font-weight:600;">2 = Best Solution for this archetype</span> ·
         <span style="color:#b45309;font-weight:600;">1 = 2nd Best Solution</span> ·
         0 = Not applicable (hidden)
     </div>
