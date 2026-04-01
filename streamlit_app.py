@@ -442,7 +442,7 @@ def render_solution_card(row, score):
 # ─────────────────────────────────────────────
 
 with st.sidebar:
-    st.markdown("## 🏠 How would you like to proceed")
+    st.markdown("## How would you like to proceed?")
     st.markdown("---")
     mode = st.radio("Here are your options :", ["Use an Archetype", "Enter my own property details"], index=0)
     st.markdown("---")
