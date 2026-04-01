@@ -442,9 +442,9 @@ def render_solution_card(row, score):
 # ─────────────────────────────────────────────
 
 with st.sidebar:
-    st.markdown("## 🏠 RetroFit Recommendor")
+    st.markdown("## 🏠 How would you like to proceed")
     st.markdown("---")
-    mode = st.radio("How would you like to proceed?", ["Use an Archetype", "Enter my own property details"], index=0)
+    mode = st.radio("Here are your options :", ["Use an Archetype", "Enter my own property details"], index=0)
     st.markdown("---")
 
     if mode == "Use an Archetype":
