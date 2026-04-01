@@ -384,7 +384,7 @@ def filter_by_wall_type(df, wall_type, wall_insulation=""):
         return df
     wt = wall_type.lower() if wall_type else ""
 
-    if wt in ("", "not sure", "other", "timber", "system"):
+    if wt in ("", "other", "timber", "system"):
         return df  # no wall filtering
 
     # If wall insulation is none, show all wall solutions regardless of wall type
@@ -451,7 +451,7 @@ def match_archetype(user_props):
         score = 0
         for f in fields:
             user_val = user_props.get(f, "").lower()
-            if user_val in ("", "not sure"):
+            if user_val in ("", ):
                 continue  # skip — don't penalise or reward
             if cdata.get(f, "").lower() == user_val:
                 score += 1
@@ -570,31 +570,52 @@ with st.sidebar:
         min_score_val = 2 if "Best" in min_score else 1
         ask_floor = st.radio("Do you want floor-specific recommendations?", ["Yes", "No"], index=1, key="ask_floor_arch")
         floor_type = st.selectbox("Floor Type", ["Concrete", "Suspended Timber"], key="ft_arch") if ask_floor == "Yes" else None
+        _cats = [c if c != "Wall Insulation Material" else "Wall Insulation" 
+                 for c in SOLUTIONS_DF["Category"].unique().tolist()]
+        _cats = list(dict.fromkeys(_cats))
         category_filter = st.multiselect(
             "Filter by category",
-            options=SOLUTIONS_DF["Category"].unique().tolist(),
-            default=SOLUTIONS_DF["Category"].unique().tolist()
+            options=_cats,
+            default=_cats,
+            key="cf_arch"
         )
+        # Map merged "Wall Insulation" back to both original categories for filtering
+        expanded_filter = []
+        for c in category_filter:
+            expanded_filter.append(c)
+            if c == "Wall Insulation":
+                expanded_filter.append("Wall Insulation Material")
+        category_filter = expanded_filter
         run = st.button("Get Recommendations →")
 
     else:
         st.markdown("**Your property details:**")
         prop_type   = st.selectbox("Property Type", ["House", "Flat", "Bungalow", "Maisonette"])
-        wall_ins    = st.selectbox("Wall Insulation Status", ["Not sure", "None", "Partial", "Full"])
-        wall_type   = st.selectbox("Wall Type", ["Not sure", "Cavity", "Solid", "Timber", "System", "Other"])
+        wall_ins    = st.selectbox("Wall Insulation Status", ["None", "Partial", "Full"])
+        wall_type   = st.selectbox("Wall Type", ["Cavity", "Solid", "Timber", "System", "Other"])
         built_form  = st.selectbox("Built Form", ["Detached", "Semi-Detached", "End Terrace", "Mid-Terrace", "Enclosed Mid-Terrace", "Enclosed End Terrace"])
-        tenure      = st.selectbox("Tenure", ["Not sure", "Owner Occupied", "Rental (Private)", "Rental (Social)", "Rented (Private)", "Rented (Social)"])
-        const_age   = st.selectbox("Construction Age", ["Not sure", "Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
+        tenure      = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rental (Social)", "Rented (Private)", "Rented (Social)"])
+        const_age   = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
         floor_area  = st.slider("Total Floor Area (m²)", 20, 400, 80)
         ask_floor   = st.radio("Do you want floor-specific recommendations?", ["Yes", "No"], index=1, key="ask_floor_custom")
         floor_type  = st.selectbox("Floor Type", ["Concrete", "Suspended Timber"], key="ft_custom") if ask_floor == "Yes" else None
         min_score   = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
+        _cats = [c if c != "Wall Insulation Material" else "Wall Insulation"
+                 for c in SOLUTIONS_DF["Category"].unique().tolist()]
+        _cats = list(dict.fromkeys(_cats))
         category_filter = st.multiselect(
             "Filter by category",
-            options=SOLUTIONS_DF["Category"].unique().tolist(),
-            default=SOLUTIONS_DF["Category"].unique().tolist()
+            options=_cats,
+            default=_cats,
+            key="cf_custom"
         )
+        expanded_filter = []
+        for c in category_filter:
+            expanded_filter.append(c)
+            if c == "Wall Insulation":
+                expanded_filter.append("Wall Insulation Material")
+        category_filter = expanded_filter
         run = st.button("Find Matching Archetype & Recommendations →")
 
 # ─────────────────────────────────────────────
@@ -697,8 +718,11 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-        categories = rec_df["Category"].unique()
-        tabs = st.tabs(list(categories) + ["All Solutions"])
+        # Merge "Wall Insulation" and "Wall Insulation Material" into one category
+        rec_df["Category"] = rec_df["Category"].replace("Wall Insulation Material", "Wall Insulation")
+
+        categories = list(dict.fromkeys(rec_df["Category"].tolist()))  # preserve order, deduplicate
+        tabs = st.tabs(categories + ["All Solutions"])
 
         for i, cat in enumerate(categories):
             with tabs[i]:
