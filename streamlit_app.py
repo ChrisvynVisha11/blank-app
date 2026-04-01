@@ -1,8 +1,4 @@
 import streamlit as st
-
-st.title("🎈 Household Renovation Recommendation")
-
-import streamlit as st
 import pandas as pd
 
 # ─────────────────────────────────────────────
