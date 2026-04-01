@@ -137,7 +137,7 @@ h1, h2, h3 {
 }
 
 .rec-card {
-    background: white;
+    background: black;
     border-radius: 12px;
     padding: 1.2rem 1.4rem;
     margin-bottom: 0.9rem;
