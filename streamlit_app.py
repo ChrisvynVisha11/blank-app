@@ -28,7 +28,7 @@ st.markdown("""
     --accent: #2d6a4f;
     --accent2: #52b788;
     --accent3: #e9c46a;
-    --text: #1a1a2e;
+    --text: black;
     --muted: #6b7280;
     --border: #e5e0d5;
     --red: #e63946;
@@ -86,7 +86,7 @@ h1, h2, h3 {
     color: white;
 }
 .hero-banner h1 {
-    color: black
+    color: white
     !important;
     margin: 0;
     font-size: 2.4rem;
