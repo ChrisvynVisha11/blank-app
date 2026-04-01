@@ -410,7 +410,7 @@ with st.sidebar:
 
     if mode == "Use an Archetype (Cluster)":
         st.markdown("**Select a archtype that best matches your property:**")
-        cluster_options = {f"Cluster {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
+        cluster_options = {f"Archtype {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
         chosen_label = st.selectbox("Archetype", list(cluster_options.keys()))
         chosen_cluster = cluster_options[chosen_label]
         min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
