@@ -181,13 +181,13 @@ h1, h2, h3 {
     align-items: center;
     gap: 3px;
 }
-.rating-A  { background: #d8f3dc; color: #1b4332; }
-.rating-B  { background: #dcfce7; color: #166534; }
-.rating-BC { background: #fef9c3; color: #713f12; }
-.rating-C  { background: #fef3cd; color: #7d5a00; }
-.rating-D  { background: #fee2e2; color: #7f1d1d; }
-.rating-DE { background: #fce7f3; color: #831843; }
-.rating-E  { background: #f3e8ff; color: #581c87; }
+.rating-A  { background: #d8f3dc; color: #1b4332; }  /* green */
+.rating-B  { background: #dbeafe; color: #1e3a5f; }  /* blue */
+.rating-BC { background: #e0e7ff; color: #3730a3; }  /* indigo */
+.rating-C  { background: #fef9c3; color: #713f12; }  /* yellow */
+.rating-D  { background: #fed7aa; color: #7c2d12; }  /* orange */
+.rating-DE { background: #fecaca; color: #7f1d1d; }  /* light red */
+.rating-E  { background: #f3e8ff; color: #581c87; }  /* purple */
 
 .section-header {
     font-family: 'DM Serif Display', serif;
@@ -379,6 +379,66 @@ def filter_by_scale(df, scale):
         return scale in name_lower
     return df[df["Solution"].apply(row_matches)]
 
+def filter_by_wall_type(df, wall_type):
+    """
+    Filter wall-related solutions based on the user's wall type.
+    Solid wall → External/Internal solid insulation + EPS Boards, Phenolic Foam, Cork, Mineral Wool boards, PIR, Wood Fibre, Aerogel
+    Cavity     → Cavity wall insulation + Mineral Wool (Blown-in), Spray Foam, EPS Beads
+    Other/Timber/System → no wall filtering applied
+    """
+    wt = wall_type.lower() if wall_type else ""
+
+    # Solutions only applicable to SOLID walls
+    SOLID_ONLY = [
+        "external solid wall insulation",
+        "internal solid wall insulation",
+        "eps boards",
+        "phenolic foam",
+        "cork",
+        "mineral wool boards",
+        "pir/phenolic/eps board",
+        "wood fibre",
+        "aerogel insulation",
+        "mineral wool (small", "mineral wool (medium", "mineral wool (large",
+    ]
+
+    # Solutions only applicable to CAVITY walls
+    CAVITY_ONLY = [
+        "cavity wall insulation",
+        "mineral wool (blown-in)",
+        "spray foam",
+        "eps beads",
+    ]
+
+    def is_solid_only(sol):
+        s = sol.lower()
+        return any(k in s for k in SOLID_ONLY)
+
+    def is_cavity_only(sol):
+        s = sol.lower()
+        return any(k in s for k in CAVITY_ONLY)
+
+    if "solid" in wt:
+        return df[~df["Solution"].apply(is_cavity_only)]
+    elif "cavity" in wt:
+        return df[~df["Solution"].apply(is_solid_only)]
+    else:
+        return df
+
+def filter_by_floor_type(df, floor_type):
+    """Filter Mineral Wool Batts by floor type — concrete or suspended timber."""
+    ft = floor_type.lower() if floor_type else ""
+    def row_matches(solution_name):
+        s = solution_name.lower()
+        if "mineral wool batts" not in s:
+            return True
+        if "concrete" in ft:
+            return "concrete" in s
+        elif "timber" in ft or "suspended" in ft:
+            return "suspended" in s or "timber" in s
+        return True
+    return df[df["Solution"].apply(row_matches)]
+
 def get_recommendations_for_archetype(archetype_id, min_score=1):
     col = f"C{archetype_id}"
     df = SOLUTIONS_DF[(SOLUTIONS_DF[col] >= 1) & (SOLUTIONS_DF[col] >= min_score)].copy()
@@ -447,6 +507,8 @@ with st.sidebar:
         chosen_archetype = archetype_options[chosen_label]
         min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
+        ask_floor = st.radio("Do you want floor-specific recommendations?", ["Yes", "No"], index=1, key="ask_floor_arch")
+        floor_type = st.selectbox("Floor Type", ["Concrete", "Suspended Timber"], key="ft_arch") if ask_floor == "Yes" else None
         category_filter = st.multiselect(
             "Filter by category",
             options=SOLUTIONS_DF["Category"].unique().tolist(),
@@ -463,6 +525,8 @@ with st.sidebar:
         tenure      = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rental (Social)", "Rented (Private)", "Rented (Social)"])
         const_age   = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
         floor_area  = st.slider("Total Floor Area (m²)", 20, 400, 80)
+        ask_floor   = st.radio("Do you want floor-specific recommendations?", ["Yes", "No"], index=1, key="ask_floor_custom")
+        floor_type  = st.selectbox("Floor Type", ["Concrete", "Suspended Timber"], key="ft_custom") if ask_floor == "Yes" else None
         min_score   = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
         category_filter = st.multiselect(
@@ -541,11 +605,19 @@ else:
     scale = get_scale_for_built_form(built_form_resolved)
     rec_df = filter_by_scale(rec_df, scale)
 
+    # Wall type filter — use user input if available, else fall back to archetype wall type
+    if match_method == "matched":
+        wall_type_resolved = wall_type
+    else:
+        wall_type_resolved = cdata["wall_type"]
+    rec_df = filter_by_wall_type(rec_df, wall_type_resolved)
+    rec_df = filter_by_floor_type(rec_df, floor_type)
+
     scale_label_map = {"small": "Small-scale", "medium": "Medium-scale", "large": "Large-scale"}
     scale_display = scale_label_map.get(scale, "All scales")
 
     st.markdown(f'<div class="section-header">✅ Recommendations for Archetype {resolved}</div>', unsafe_allow_html=True)
-    st.markdown(f'<p style="color:#3d3d3d;font-size:0.85rem;margin-bottom:0.8rem;">Showing <strong>{scale_display}</strong> solutions based on built form: <strong>{built_form_resolved}</strong></p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="color:#3d3d3d;font-size:0.85rem;margin-bottom:0.8rem;">Showing <strong>{scale_display}</strong> solutions · Wall type: <strong>{wall_type_resolved}</strong> · Built form: <strong>{built_form_resolved}</strong></p>', unsafe_allow_html=True)
 
     if rec_df.empty:
         st.info("No recommendations found for the selected filters. Try lowering the minimum score threshold.")
