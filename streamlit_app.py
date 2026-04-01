@@ -468,32 +468,34 @@ def rating_css(r):
                "C": "rating-C", "D": "rating-D", "D/E": "rating-DE", "E": "rating-E"}
     return mapping.get(r.strip(), "badge-gray")
 
-# Material sub-options for solid wall insulation types
-EXTERNAL_SOLID_MATERIALS = [
-    "EPS Boards", "Phenolic Foam", "Cork", "Mineral Wool (small", "Mineral Wool (medium", "Mineral Wool (large"
-]
-INTERNAL_SOLID_MATERIALS = [
-    "PIR/Phenolic/EPS Board", "Wood Fibre", "Aerogel Insulation"
-]
+# Material sub-options for wall insulation types
+EXTERNAL_SOLID_MATERIALS = ["eps boards", "phenolic foam", "cork", "mineral wool boards", "mineral wool (small", "mineral wool (medium", "mineral wool (large"]
+INTERNAL_SOLID_MATERIALS = ["pir/phenolic/eps board", "wood fibre", "aerogel insulation"]
+CAVITY_MATERIALS         = ["mineral wool (blown-in)", "spray foam", "eps beads"]
+ALL_WALL_MATERIAL_KEYS   = EXTERNAL_SOLID_MATERIALS + INTERNAL_SOLID_MATERIALS + CAVITY_MATERIALS
 
-def get_sub_materials(solution_name, scale, rec_df, col_id):
-    """Return HTML list of relevant material sub-options from the recommendations df."""
+def is_wall_material(solution_name):
+    s = solution_name.lower()
+    return any(k in s for k in ALL_WALL_MATERIAL_KEYS)
+
+def get_sub_materials(solution_name, scale, full_df):
+    """Return nested HTML of materials for a wall insulation parent card."""
     sol_lower = solution_name.lower()
     if "external solid" in sol_lower:
-        keywords = [m.lower() for m in EXTERNAL_SOLID_MATERIALS]
+        keywords = EXTERNAL_SOLID_MATERIALS
     elif "internal solid" in sol_lower:
-        keywords = [m.lower() for m in INTERNAL_SOLID_MATERIALS]
+        keywords = INTERNAL_SOLID_MATERIALS
+    elif "cavity wall insulation" in sol_lower:
+        keywords = CAVITY_MATERIALS
     else:
         return ""
 
-    # Filter materials from Wall Insulation Material category matching the scale
-    mat_df = rec_df[rec_df["Category"] == "Wall Insulation Material"].copy()
-    if scale:
-        mat_df = filter_by_scale(mat_df, scale)
-
+    mat_df = full_df[full_df["Category"] == "Wall Insulation"].copy()
     matched = mat_df[mat_df["Solution"].str.lower().apply(
         lambda s: any(k in s for k in keywords)
     )]
+    if scale:
+        matched = filter_by_scale(matched, scale)
 
     if matched.empty:
         return ""
@@ -502,24 +504,21 @@ def get_sub_materials(solution_name, scale, rec_df, col_id):
     for _, mrow in matched.iterrows():
         mc = mrow["CarbonRating"] if mrow["CarbonRating"] else ""
         ma = mrow["AffordRating"] if mrow["AffordRating"] else ""
-        mscore = mrow[col_id]
-        mlabel, mbadge = score_label(mscore)
         mc_html = f'<span class="rating-pill {rating_css(mc)}" style="font-size:0.65rem;">🌿 {mc}</span>' if mc else ""
         ma_html = f'<span class="rating-pill {rating_css(ma)}" style="font-size:0.65rem;">💷 {ma}</span>' if ma else ""
         sol_name = str(mrow["Solution"]).replace("'", "&#39;").replace('"', "&quot;")
         items_html += (
-            '<div style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:0.5px solid #f0ede6;">'
+            '<div style="display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:0.5px solid #f0ede6;">'
             f'<span style="font-size:0.8rem; color:#1a1a2e; flex:1;">{sol_name}</span>'
-            f'<span class="badge {mbadge}" style="font-size:0.65rem;">{mlabel}</span>'
             f'{mc_html}{ma_html}'
             '</div>'
         )
 
-    return f"""
-    <div style="margin-top:10px; background:#f9f7f4; border-radius:8px; padding:10px 12px;">
-        <div style="font-size:0.72rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">Recommended Materials</div>
-        {items_html}
-    </div>"""
+    return (
+        '<div style="margin-top:10px; background:#f9f7f4; border-radius:8px; padding:10px 12px;">'
+        '<div style="font-size:0.72rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">Recommended Materials</div>'
+        + items_html + '</div>'
+    )
 
 def render_solution_card(row, score, scale=None, rec_df=None, col_id=None):
     label, badge_cls = score_label(score)
@@ -534,15 +533,18 @@ def render_solution_card(row, score, scale=None, rec_df=None, col_id=None):
     afford_html = f'<span class="rating-pill {rating_css(afford)}">💷 Afford: {afford}</span>'   if afford else ""
 
     sub_html = ""
-    if rec_df is not None and col_id is not None:
-        sub_html = get_sub_materials(row["Solution"], scale, rec_df, col_id)
+    if rec_df is not None:
+        sub_html = get_sub_materials(row["Solution"], scale, rec_df)
+
+    sol_title = str(row['Solution']).replace("'", "&#39;").replace('"', "&quot;")
+    cat_title  = str(row['Category']).replace("'", "&#39;").replace('"', "&quot;")
 
     st.markdown(f"""
     <div class="rec-card {priority_cls}">
-        <div class="rec-title">{row['Solution']}</div>
+        <div class="rec-title">{sol_title}</div>
         <div class="rec-badges">
             <span class="badge {badge_cls}">{label}</span>
-            <span class="badge badge-blue">{row['Category']}</span>
+            <span class="badge badge-blue">{cat_title}</span>
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
             {carbon_html}{energy_html}{afford_html}
@@ -736,6 +738,9 @@ else:
         for i, cat in enumerate(categories):
             with tabs[i]:
                 cat_df       = rec_df[rec_df["Category"] == cat]
+                # For Wall Insulation tab: hide individual material rows (they appear nested inside parent cards)
+                if cat == "Wall Insulation":
+                    cat_df = cat_df[~cat_df["Solution"].apply(is_wall_material)]
                 cat_strong   = cat_df[cat_df[col_id] == 2]
                 cat_consider = cat_df[cat_df[col_id] == 1]
                 if not cat_strong.empty:
