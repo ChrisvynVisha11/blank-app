@@ -5,7 +5,7 @@ import pandas as pd
 # PAGE CONFIG
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="RetroFit Recommender",
+    page_title="Retrofit Recommender",
     page_icon="🏠",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -618,8 +618,8 @@ with st.sidebar:
 
 st.markdown("""
 <div class="hero-banner">
-    <h1>🏠 RetroFit Recommender</h1>
-    <p>Tailored retrofit solutions for UK residential properties — matched to your archetype or property characteristics.</p>
+    <h1>🏠 Retrofit Recommender</h1>
+    <p>Provides retrofit solutions for UK residential properties matched to your archetype or property characteristics.</p>
     <p style="margin-top:0.6rem;font-size:0.8rem;color:#a8d5be;letter-spacing:0.04em;">by Sheffield WattWatchers</p>
 </div>
 """, unsafe_allow_html=True)
