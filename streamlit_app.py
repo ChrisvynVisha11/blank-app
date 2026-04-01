@@ -331,6 +331,34 @@ def score_label(s):
     if s == 1: return ("2nd Best Solution", "badge-amber")
     return ("Not Applicable", "badge-red")
 
+def get_scale_for_built_form(built_form):
+    """Return the scale keyword to filter solutions by, based on built form."""
+    bf = built_form.lower()
+    if "detached" in bf and "semi" not in bf and "end" not in bf:
+        return "small"
+    elif "semi" in bf or "mid" in bf:
+        return "medium"
+    elif "end" in bf:
+        return "large"
+    return None  # No scale filtering for flats / unknown
+
+def filter_by_scale(df, scale):
+    """
+    Keep rows that either:
+      - contain the matching scale keyword in the solution name, OR
+      - have no scale keyword at all (e.g. single-option solutions like Solar PV, glazing types)
+    """
+    if scale is None:
+        return df
+    scale_keywords = ["small", "medium", "large"]
+    def row_matches(solution_name):
+        name_lower = solution_name.lower()
+        has_any_scale = any(kw in name_lower for kw in scale_keywords)
+        if not has_any_scale:
+            return True   # no scale in name → always include
+        return scale in name_lower
+    return df[df["Solution"].apply(row_matches)]
+
 def get_recommendations_for_archetype(archetype_id, min_score=1):
     col = f"C{archetype_id}"
     df = SOLUTIONS_DF[(SOLUTIONS_DF[col] >= 1) & (SOLUTIONS_DF[col] >= min_score)].copy()
@@ -479,7 +507,16 @@ else:
     rec_df = get_recommendations_for_archetype(resolved, min_score_val)
     rec_df = rec_df[rec_df["Category"].isin(category_filter)]
 
+    # Scale filtering based on built form
+    built_form_resolved = cdata["built_form"]
+    scale = get_scale_for_built_form(built_form_resolved)
+    rec_df = filter_by_scale(rec_df, scale)
+
+    scale_label_map = {"small": "Small-scale", "medium": "Medium-scale", "large": "Large-scale"}
+    scale_display = scale_label_map.get(scale, "All scales")
+
     st.markdown(f'<div class="section-header">✅ Recommendations for Archetype {resolved}</div>', unsafe_allow_html=True)
+    st.markdown(f'<p style="color:#3d3d3d;font-size:0.85rem;margin-bottom:0.8rem;">Showing <strong>{scale_display}</strong> solutions based on built form: <strong>{built_form_resolved}</strong></p>', unsafe_allow_html=True)
 
     if rec_df.empty:
         st.info("No recommendations found for the selected filters. Try lowering the minimum score threshold.")
