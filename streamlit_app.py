@@ -681,19 +681,31 @@ else:
         """, unsafe_allow_html=True)
 
     rec_df = get_recommendations_for_archetype(resolved, min_score_val)
+
+    # If wall insulation is None, force-include all wall insulation solutions
+    # regardless of cluster score (they may have score 0 for this cluster)
+    if match_method == "matched":
+        wall_ins_resolved = wall_ins
+    else:
+        wall_ins_resolved = cdata["wall_insulation"]
+
+    if wall_ins_resolved.lower() == "none":
+        wall_cats = ["Wall Insulation", "Wall Insulation Material"]
+        extra = SOLUTIONS_DF[SOLUTIONS_DF["Category"].isin(wall_cats)].copy()
+        extra[col_id] = extra[col_id].clip(lower=1)  # treat as at least score 1
+        rec_df = pd.concat([rec_df, extra]).drop_duplicates(subset=["Solution"]).reset_index(drop=True)
+
     rec_df = rec_df[rec_df["Category"].isin(category_filter)]
 
     built_form_resolved = cdata["built_form"]
     scale = get_scale_for_built_form(built_form_resolved)
     rec_df = filter_by_scale(rec_df, scale)
 
-    # Wall type filter — use user input if available, else fall back to archetype wall type
+    # Wall type filter
     if match_method == "matched":
         wall_type_resolved = wall_type
-        wall_ins_resolved  = wall_ins
     else:
         wall_type_resolved = cdata["wall_type"]
-        wall_ins_resolved  = cdata["wall_insulation"]
     rec_df = filter_by_wall_type(rec_df, wall_type_resolved, wall_ins_resolved)
     rec_df = filter_by_floor_type(rec_df, floor_type)
 
