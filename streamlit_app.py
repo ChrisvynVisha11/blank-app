@@ -61,7 +61,6 @@ h1, h2, h3 {
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
-
 [data-testid="stSidebar"] h1,
 [data-testid="stSidebar"] h2,
 [data-testid="stSidebar"] h3,
@@ -70,7 +69,6 @@ h1, h2, h3 {
 [data-testid="stSidebar"] .stMultiSelect > label {
     color: #ffffff !important;
 }
-
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label span p {
     color: #e8e4dc !important;
     text-transform: none !important;
@@ -113,30 +111,22 @@ h1, h2, h3 {
     font-size: 1.05rem;
 }
 
-.cluster-card {
+/* Archetype card — no hover effect */
+.archetype-card {
     background: white;
     border-radius: 12px;
     padding: 1.2rem 1.4rem;
     margin-bottom: 0.8rem;
     border: 2px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
+    cursor: default;
 }
-.cluster-card:hover {
-    border-color: var(--accent2);
-    box-shadow: 0 4px 16px rgba(45,106,79,0.12);
-}
-.cluster-card.selected {
-    border-color: var(--accent);
-    background: #f0faf4;
-}
-.cluster-title {
+.archetype-title {
     font-family: 'DM Serif Display', serif;
     font-size: 1.05rem;
     color: var(--text);
     margin-bottom: 0.3rem;
 }
-.cluster-meta {
+.archetype-meta {
     font-size: 0.78rem;
     color: var(--muted);
     display: flex;
@@ -161,12 +151,8 @@ h1, h2, h3 {
     border-left: 5px solid var(--accent2);
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
-.rec-card.priority-high {
-    border-left-color: var(--accent);
-}
-.rec-card.priority-medium {
-    border-left-color: var(--accent3);
-}
+.rec-card.priority-high  { border-left-color: var(--accent); }
+.rec-card.priority-medium { border-left-color: var(--accent3); }
 .rec-title {
     font-weight: 600;
     font-size: 0.95rem;
@@ -190,20 +176,6 @@ h1, h2, h3 {
 .badge-blue  { background: #dbeafe; color: #1e3a5f; }
 .badge-red   { background: #fee2e2; color: #7f1d1d; }
 .rec-detail  { font-size: 0.8rem; color: var(--muted); }
-
-.match-score {
-    display: inline-block;
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    line-height: 32px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: white;
-}
-.score-2 { background: var(--accent); }
-.score-1 { background: var(--accent3); color: #333; }
-.score-0 { background: #e5e7eb; color: #6b7280; }
 
 .section-header {
     font-family: 'DM Serif Display', serif;
@@ -258,20 +230,17 @@ h1, h2, h3 {
 # ─────────────────────────────────────────────
 
 CLUSTERS = {
-    1: {"label": "Archtype 1 – Older Private Rental Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "System", "built_form": "Detached", "tenure": "Rental (Private)", "construction_age": "1900-1949", "floor_area": 77.7, "imd_decile": 2, "income": 34951},
-    2: {"label": "Archtype 2 – Owner-Occupied Pre-War Semi", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Semi-Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 134.6, "imd_decile": 0, "income": 47848},
-    3: {"label": "Archtype 3 – Private Rental Pre-War Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Rented (Private)", "construction_age": "1900-1949", "floor_area": 46.7, "imd_decile": 2, "income": 30876},
-    4: {"label": "Archtype 4 – Owner-Occupied Pre-War Terrace", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Mid-Terrace", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 47.6, "imd_decile": 3, "income": 38518},
-    5: {"label": "Archtype 5 – Social Rental Post-War Flat", "property_type": "Flat", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "End Terrace", "tenure": "Rental (Social)", "construction_age": "1950-2002", "floor_area": 46.9, "imd_decile": 0, "income": 32923},
-    6: {"label": "Archtype 6 – Uninsulated Owner Detached", "property_type": "House", "wall_insulation": "None", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 23.3, "imd_decile": 1, "income": 33125},
-    7: {"label": "Archtype 7 – Well-Insulated Post-War Semi", "property_type": "House", "wall_insulation": "Full", "wall_type": "Cavity", "built_form": "Semi-Detached", "tenure": "Owner Occupied", "construction_age": "1950-2002", "floor_area": 44.8, "imd_decile": 1, "income": 33804},
-    8: {"label": "Archtype 8 – Large Wealthy Owner Detached", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity", "built_form": "Detached", "tenure": "Owner Occupied", "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
+    1: {"label": "Archetype 1 – Older Private Rental Detached",   "property_type": "House", "wall_insulation": "Partial", "wall_type": "System",  "built_form": "Detached",      "tenure": "Rental (Private)",  "construction_age": "1900-1949", "floor_area": 77.7,  "imd_decile": 2, "income": 34951},
+    2: {"label": "Archetype 2 – Owner-Occupied Pre-War Semi",      "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Semi-Detached", "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 134.6, "imd_decile": 0, "income": 47848},
+    3: {"label": "Archetype 3 – Private Rental Pre-War Detached",  "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Rented (Private)",  "construction_age": "1900-1949", "floor_area": 46.7,  "imd_decile": 2, "income": 30876},
+    4: {"label": "Archetype 4 – Owner-Occupied Pre-War Terrace",   "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Mid-Terrace",   "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 47.6,  "imd_decile": 3, "income": 38518},
+    5: {"label": "Archetype 5 – Social Rental Post-War Flat",      "property_type": "Flat",  "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "End Terrace",   "tenure": "Rental (Social)",   "construction_age": "1950-2002", "floor_area": 46.9,  "imd_decile": 0, "income": 32923},
+    6: {"label": "Archetype 6 – Uninsulated Owner Detached",       "property_type": "House", "wall_insulation": "None",    "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 23.3,  "imd_decile": 1, "income": 33125},
+    7: {"label": "Archetype 7 – Well-Insulated Post-War Semi",     "property_type": "House", "wall_insulation": "Full",    "wall_type": "Cavity",  "built_form": "Semi-Detached", "tenure": "Owner Occupied",    "construction_age": "1950-2002", "floor_area": 44.8,  "imd_decile": 1, "income": 33804},
+    8: {"label": "Archetype 8 – Large Wealthy Owner Detached",     "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
 }
 
-# Solutions: (solution_type, sub_type, cluster_scores[1..8])
-# cluster_scores: 0=not recommended, 1=consider, 2=strongly recommended
 SOLUTIONS_RAW = [
-    # Category, Solution, C1,C2,C3,C4,C5,C6,C7,C8
     ("Heating Source", "Mechanical Ventilation with Heat Recovery (high efficiency)",    2,0,2,2,2,2,1,1),
     ("Heating Source", "Mechanical Ventilation with Heat Recovery (low efficiency)",     2,0,2,2,2,2,1,1),
     ("Heating Source", "ASHP (small-scale/low-efficiency)",                              1,0,2,2,0,1,0,1),
@@ -312,42 +281,41 @@ SOLUTIONS_RAW = [
     ("Roof/Loft", "Draught-proofing (small-scale)",                                      1,0,2,2,0,0,2,2),
     ("Roof/Loft", "Draught-proofing (medium-scale)",                                     1,0,2,2,0,0,2,2),
     ("Roof/Loft", "Draught-proofing (large-scale)",                                      1,0,2,2,0,0,2,2),
-    # Wall Insulation Materials
-    ("Wall Insulation Material", "Mineral Wool (Blown-in) – small",                     1,0,1,2,0,0,1,2),
-    ("Wall Insulation Material", "Mineral Wool (Blown-in) – medium",                    1,0,1,2,0,0,1,2),
-    ("Wall Insulation Material", "Mineral Wool (Blown-in) – large",                     1,0,1,2,0,0,1,2),
-    ("Wall Insulation Material", "Spray Foam (closed-cell) – small",                    0,0,2,2,0,0,0,1),
-    ("Wall Insulation Material", "Spray Foam (closed-cell) – medium",                   0,0,2,2,0,0,0,1),
-    ("Wall Insulation Material", "Spray Foam (closed-cell) – large",                    0,0,2,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Beads – small",                                   0,0,1,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Beads – medium",                                  0,0,1,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Beads – large",                                   0,0,1,2,0,0,0,1),
-    ("Wall Insulation Material", "EPS Boards – small",                                  1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "EPS Boards – medium",                                 1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "EPS Boards – large",                                  1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Phenolic Foam – small",                               1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Phenolic Foam – medium",                              1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Phenolic Foam – large",                               1,0,1,1,0,0,1,2),
-    ("Wall Insulation Material", "Cork – small",                                        0,0,0,1,0,0,2,2),
-    ("Wall Insulation Material", "Cork – medium",                                       0,0,0,1,0,0,2,2),
-    ("Wall Insulation Material", "Cork – large",                                        0,0,0,1,0,0,2,2),
-    ("Wall Insulation Material", "Mineral Wool Boards – small",                         1,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Mineral Wool Boards – medium",                        1,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Mineral Wool Boards – large",                         1,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – small",                      0,0,1,0,0,0,1,1),
-    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – medium",                     0,0,1,0,0,0,1,1),
-    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – large",                      0,0,1,0,0,0,1,1),
-    ("Wall Insulation Material", "Wood Fibre – small",                                  2,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Wood Fibre – medium",                                 2,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Wood Fibre – large",                                  2,0,2,2,0,0,2,2),
-    ("Wall Insulation Material", "Aerogel Insulation – small",                          1,0,1,2,0,0,1,1),
-    ("Wall Insulation Material", "Aerogel Insulation – medium",                         1,0,1,2,0,0,1,1),
-    ("Wall Insulation Material", "Aerogel Insulation – large",                          1,0,1,2,0,0,1,1),
-    ("Floor Insulation Material", "Mineral Wool Batts",                                 1,0,0,2,0,0,1,2),
-    ("Floor Insulation Material", "Rigid Foam Boards (PIR)",                            1,0,0,1,0,0,0,1),
-    ("Roof/Loft Material", "Mineral Wool/Fibreglass Rolls",                             1,0,2,2,0,0,1,2),
-    ("Roof/Loft Material", "Cellulose (Blown-in)",                                      1,0,1,2,0,0,1,2),
-    ("Roof/Loft Material", "Rigid Boards (PIR/Phenolic)",                               0,0,1,1,0,0,0,1),
+    ("Wall Insulation Material", "Mineral Wool (Blown-in) – small",                      1,0,1,2,0,0,1,2),
+    ("Wall Insulation Material", "Mineral Wool (Blown-in) – medium",                     1,0,1,2,0,0,1,2),
+    ("Wall Insulation Material", "Mineral Wool (Blown-in) – large",                      1,0,1,2,0,0,1,2),
+    ("Wall Insulation Material", "Spray Foam (closed-cell) – small",                     0,0,2,2,0,0,0,1),
+    ("Wall Insulation Material", "Spray Foam (closed-cell) – medium",                    0,0,2,2,0,0,0,1),
+    ("Wall Insulation Material", "Spray Foam (closed-cell) – large",                     0,0,2,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Beads – small",                                    0,0,1,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Beads – medium",                                   0,0,1,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Beads – large",                                    0,0,1,2,0,0,0,1),
+    ("Wall Insulation Material", "EPS Boards – small",                                   1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "EPS Boards – medium",                                  1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "EPS Boards – large",                                   1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Phenolic Foam – small",                                1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Phenolic Foam – medium",                               1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Phenolic Foam – large",                                1,0,1,1,0,0,1,2),
+    ("Wall Insulation Material", "Cork – small",                                         0,0,0,1,0,0,2,2),
+    ("Wall Insulation Material", "Cork – medium",                                        0,0,0,1,0,0,2,2),
+    ("Wall Insulation Material", "Cork – large",                                         0,0,0,1,0,0,2,2),
+    ("Wall Insulation Material", "Mineral Wool Boards – small",                          1,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Mineral Wool Boards – medium",                         1,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Mineral Wool Boards – large",                          1,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – small",                       0,0,1,0,0,0,1,1),
+    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – medium",                      0,0,1,0,0,0,1,1),
+    ("Wall Insulation Material", "PIR/Phenolic/EPS Board – large",                       0,0,1,0,0,0,1,1),
+    ("Wall Insulation Material", "Wood Fibre – small",                                   2,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Wood Fibre – medium",                                  2,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Wood Fibre – large",                                   2,0,2,2,0,0,2,2),
+    ("Wall Insulation Material", "Aerogel Insulation – small",                           1,0,1,2,0,0,1,1),
+    ("Wall Insulation Material", "Aerogel Insulation – medium",                          1,0,1,2,0,0,1,1),
+    ("Wall Insulation Material", "Aerogel Insulation – large",                           1,0,1,2,0,0,1,1),
+    ("Floor Insulation Material", "Mineral Wool Batts",                                  1,0,0,2,0,0,1,2),
+    ("Floor Insulation Material", "Rigid Foam Boards (PIR)",                             1,0,0,1,0,0,0,1),
+    ("Roof/Loft Material", "Mineral Wool/Fibreglass Rolls",                              1,0,2,2,0,0,1,2),
+    ("Roof/Loft Material", "Cellulose (Blown-in)",                                       1,0,1,2,0,0,1,2),
+    ("Roof/Loft Material", "Rigid Boards (PIR/Phenolic)",                                0,0,1,1,0,0,0,1),
 ]
 
 SOLUTIONS_DF = pd.DataFrame(SOLUTIONS_RAW, columns=[
@@ -363,27 +331,24 @@ def score_label(s):
     if s == 1: return ("2nd Best Solution", "badge-amber")
     return ("Not Applicable", "badge-red")
 
-def get_recommendations_for_cluster(cluster_id, min_score=1):
-    """Only return scores >= min_score. Score 0 = not applicable, always excluded."""
-    col = f"C{cluster_id}"
+def get_recommendations_for_archetype(archetype_id, min_score=1):
+    col = f"C{archetype_id}"
     df = SOLUTIONS_DF[(SOLUTIONS_DF[col] >= 1) & (SOLUTIONS_DF[col] >= min_score)].copy()
     df = df.sort_values(col, ascending=False)
     return df
 
-def match_cluster(user_props):
-    """Simple nearest-cluster matching by counting matching categorical fields."""
+def match_archetype(user_props):
     fields = ["property_type", "wall_insulation", "wall_type", "built_form", "tenure", "construction_age"]
-    best_cluster = None
+    best_archetype = None
     best_score = -1
     for cid, cdata in CLUSTERS.items():
         score = sum(1 for f in fields if cdata.get(f, "").lower() == user_props.get(f, "").lower())
-        # Also factor in floor area proximity (normalised)
         fa_diff = abs(cdata["floor_area"] - user_props.get("floor_area", 80)) / 200
         score -= fa_diff * 0.5
         if score > best_score:
             best_score = score
-            best_cluster = cid
-    return best_cluster, best_score
+            best_archetype = cid
+    return best_archetype, best_score
 
 def render_solution_card(row, score):
     label, badge_cls = score_label(score)
@@ -399,20 +364,20 @@ def render_solution_card(row, score):
     """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# SIDEBAR – Input Mode
+# SIDEBAR
 # ─────────────────────────────────────────────
 
 with st.sidebar:
     st.markdown("## 🏠 RetroFit")
     st.markdown("---")
-    mode = st.radio("How would you like to proceed?", ["Use an Archetype (Cluster)", "Enter my own property details"], index=0)
+    mode = st.radio("How would you like to proceed?", ["Use an Archetype", "Enter my own property details"], index=0)
     st.markdown("---")
 
-    if mode == "Use an Archetype (Cluster)":
-        st.markdown("**Select a archtype that best matches your property:**")
-        cluster_options = {f"Archtype {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
-        chosen_label = st.selectbox("Archetype", list(cluster_options.keys()))
-        chosen_cluster = cluster_options[chosen_label]
+    if mode == "Use an Archetype":
+        st.markdown("**Select an archetype that best matches your property:**")
+        archetype_options = {f"Archetype {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
+        chosen_label = st.selectbox("Archetype", list(archetype_options.keys()))
+        chosen_archetype = archetype_options[chosen_label]
         min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
         category_filter = st.multiselect(
@@ -424,21 +389,21 @@ with st.sidebar:
 
     else:
         st.markdown("**Your property details:**")
-        prop_type = st.selectbox("Property Type", ["House", "Flat", "Bungalow"])
-        wall_ins = st.selectbox("Wall Insulation Status", ["None", "Partial", "Full"])
-        wall_type = st.selectbox("Wall Type", ["Cavity", "System", "Solid"])
-        built_form = st.selectbox("Built Form", ["Detached", "Semi-Detached", "Mid-Terrace", "End Terrace"])
-        tenure = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rented (Private)", "Rental (Social)"])
-        const_age = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
-        floor_area = st.slider("Total Floor Area (m²)", 20, 400, 80)
-        min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
+        prop_type   = st.selectbox("Property Type", ["House", "Flat", "Bungalow"])
+        wall_ins    = st.selectbox("Wall Insulation Status", ["None", "Partial", "Full"])
+        wall_type   = st.selectbox("Wall Type", ["Cavity", "System", "Solid"])
+        built_form  = st.selectbox("Built Form", ["Detached", "Semi-Detached", "Mid-Terrace", "End Terrace"])
+        tenure      = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rented (Private)", "Rental (Social)"])
+        const_age   = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
+        floor_area  = st.slider("Total Floor Area (m²)", 20, 400, 80)
+        min_score   = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
         category_filter = st.multiselect(
             "Filter by category",
             options=SOLUTIONS_DF["Category"].unique().tolist(),
             default=SOLUTIONS_DF["Category"].unique().tolist()
         )
-        run = st.button("Find Matching Archtypes & Recommendations →")
+        run = st.button("Find Matching Archetype & Recommendations →")
 
 # ─────────────────────────────────────────────
 # MAIN CONTENT
@@ -452,17 +417,16 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 if not run:
-    # Landing state
-    st.markdown('<div class="section-header">About the Archtypes </div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each cluster represents a common UK residential property archetype. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">About the Archetypes</div>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
         with cols[i % 4]:
             st.markdown(f"""
-            <div class="cluster-card">
-                <div class="cluster-title">Cluster {cid}</div>
-                <div class="cluster-meta">
+            <div class="archetype-card">
+                <div class="archetype-title">Archetype {cid}</div>
+                <div class="archetype-meta">
                     <span class="tag">{cdata['property_type']}</span>
                     <span class="tag">{cdata['built_form']}</span>
                     <span class="tag">{cdata['construction_age']}</span>
@@ -475,39 +439,34 @@ if not run:
             """, unsafe_allow_html=True)
 
 else:
-    # ── Resolve cluster
-    if mode == "Use an Archetype (Cluster)":
-        resolved_cluster = chosen_cluster
+    if mode == "Use an Archetype":
+        resolved = chosen_archetype
         match_method = "archetype"
-        match_confidence = None
     else:
         user_props = {
-            "property_type": prop_type,
-            "wall_insulation": wall_ins,
-            "wall_type": wall_type,
-            "built_form": built_form,
-            "tenure": tenure,
-            "construction_age": const_age,
-            "floor_area": float(floor_area),
+            "property_type":     prop_type,
+            "wall_insulation":   wall_ins,
+            "wall_type":         wall_type,
+            "built_form":        built_form,
+            "tenure":            tenure,
+            "construction_age":  const_age,
+            "floor_area":        float(floor_area),
         }
-        resolved_cluster, match_confidence = match_cluster(user_props)
+        resolved, _ = match_archetype(user_props)
         match_method = "matched"
 
-    cdata = CLUSTERS[resolved_cluster]
-    col_id = f"C{resolved_cluster}"
+    cdata  = CLUSTERS[resolved]
+    col_id = f"C{resolved}"
 
-    # ── Cluster summary
     st.markdown(f'<div class="section-header">{"📌 Selected" if match_method=="archetype" else "🎯 Best Matched"} Archetype: {cdata["label"]}</div>', unsafe_allow_html=True)
 
     if match_method == "matched":
         st.markdown(f"""
         <div class="info-box">
-            Your property characteristics have been matched to <strong>Cluster {resolved_cluster}</strong>.
-            Review the cluster profile below and refine your selections in the sidebar if needed.
+            Your property characteristics have been matched to <strong>Archetype {resolved}</strong>.
+            Review the archetype profile below and refine your selections in the sidebar if needed.
         </div>
         """, unsafe_allow_html=True)
-
-
 
     st.markdown(f"""
     <div style="margin-top:0.5rem;margin-bottom:1rem;">
@@ -517,19 +476,18 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Recommendations
-    rec_df = get_recommendations_for_cluster(resolved_cluster, min_score_val)
+    rec_df = get_recommendations_for_archetype(resolved, min_score_val)
     rec_df = rec_df[rec_df["Category"].isin(category_filter)]
 
-    st.markdown(f'<div class="section-header">✅ Recommendations for Archtype {resolved_cluster}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">✅ Recommendations for Archetype {resolved}</div>', unsafe_allow_html=True)
 
     if rec_df.empty:
         st.info("No recommendations found for the selected filters. Try lowering the minimum score threshold.")
     else:
-        strong = rec_df[rec_df[col_id] == 2]
+        strong  = rec_df[rec_df[col_id] == 2]
         consider = rec_df[rec_df[col_id] == 1]
+        total   = len(rec_df)
 
-        total = len(rec_df)
         st.markdown(f"""
         <div style="margin-bottom:1rem;">
             <span class="stat-pill">🟢 {len(strong)} Best Solutions</span>
@@ -543,8 +501,8 @@ else:
 
         for i, cat in enumerate(categories):
             with tabs[i]:
-                cat_df = rec_df[rec_df["Category"] == cat]
-                cat_strong = cat_df[cat_df[col_id] == 2]
+                cat_df      = rec_df[rec_df["Category"] == cat]
+                cat_strong  = cat_df[cat_df[col_id] == 2]
                 cat_consider = cat_df[cat_df[col_id] == 1]
                 if not cat_strong.empty:
                     st.markdown('<p style="color:#2d6a4f;font-weight:700;font-size:1rem;margin-bottom:0.5rem;">🟢 Best Solutions</p>', unsafe_allow_html=True)
@@ -562,13 +520,12 @@ else:
                 hide_index=True
             )
 
-    # ── Legend
     st.markdown("---")
     st.markdown("""
     <div style="font-size:0.78rem;color:#6b7280;">
-        <strong>Score guide:</strong> 
-        <span style="color:#2d6a4f;font-weight:600;">2 = Best Solution for this cluster</span> · 
-        <span style="color:#b45309;font-weight:600;">1 = 2nd Best Solution</span> · 
+        <strong>Score guide:</strong>
+        <span style="color:#2d6a4f;font-weight:600;">2 = Best Solution for this archetype</span> ·
+        <span style="color:#b45309;font-weight:600;">1 = 2nd Best Solution</span> ·
         0 = Not applicable (hidden)
     </div>
     """, unsafe_allow_html=True)
