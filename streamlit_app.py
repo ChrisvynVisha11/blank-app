@@ -440,7 +440,7 @@ st.markdown("""
 if not run:
     # Landing state
     st.markdown('<div class="section-header">About the Clusters</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each cluster represents a common UK residential property archetype. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:white;font-size:1rem;margin-bottom:1.2rem;">Each cluster represents a common UK residential property archetype. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
