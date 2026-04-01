@@ -5,7 +5,7 @@ import pandas as pd
 # PAGE CONFIG
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="RetroFit Recommender",
+    page_title="Retrofit Recommender",
     page_icon="🏠",
     layout="wide",
     initial_sidebar_state="expanded",
