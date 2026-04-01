@@ -108,7 +108,7 @@ h1, h2, h3 {
 }
 
 /* Archetype card — no hover effect */
-.archetype-card {
+.Archetype-card {
     background: white;
     border-radius: 12px;
     padding: 1.2rem 1.4rem;
@@ -116,13 +116,13 @@ h1, h2, h3 {
     border: 2px solid var(--border);
     cursor: default;
 }
-.archetype-title {
+.Archetype-title {
     font-family: 'DM Serif Display', serif;
     font-size: 1.05rem;
     color: var(--text);
     margin-bottom: 0.3rem;
 }
-.archetype-meta {
+.Archetype-meta {
     font-size: 0.78rem;
     color: var(--muted);
     display: flex;
@@ -319,7 +319,7 @@ SOLUTIONS_DF = pd.DataFrame(SOLUTIONS_RAW, columns=[
 ])
 
 # Archetype comparison metrics (from cluster data)
-ARCHETYPE_METRICS = {
+Archetype_METRICS = {
     1: {"co2": 3.95, "gap": 14.49, "cost": 12.29},
     2: {"co2": 2.43, "gap": 15.06, "cost": 10.96},
     3: {"co2": 3.48, "gap": 14.52, "cost": 12.07},
@@ -342,11 +342,11 @@ def score_label(s):
 def get_scale_for_built_form(built_form):
     """Return the scale keyword to filter solutions by, based on built form."""
     bf = built_form.lower()
-    if "detached" in bf and "semi" not in bf and "end" not in bf:
+    if bf == "detached":
         return "small"
-    elif "semi" in bf or "mid" in bf:
+    elif bf in ["semi-detached", "mid-terrace", "enclosed mid-terrace"]:
         return "medium"
-    elif "end" in bf:
+    elif bf in ["end terrace", "enclosed end terrace"]:
         return "large"
     return None  # No scale filtering for flats / unknown
 
@@ -367,15 +367,15 @@ def filter_by_scale(df, scale):
         return scale in name_lower
     return df[df["Solution"].apply(row_matches)]
 
-def get_recommendations_for_archetype(archetype_id, min_score=1):
-    col = f"C{archetype_id}"
+def get_recommendations_for_Archetype(Archetype_id, min_score=1):
+    col = f"C{Archetype_id}"
     df = SOLUTIONS_DF[(SOLUTIONS_DF[col] >= 1) & (SOLUTIONS_DF[col] >= min_score)].copy()
     df = df.sort_values(col, ascending=False)
     return df
 
-def match_archetype(user_props):
+def match_Archetype(user_props):
     fields = ["property_type", "wall_insulation", "wall_type", "built_form", "tenure", "construction_age"]
-    best_archetype = None
+    best_Archetype = None
     best_score = -1
     for cid, cdata in CLUSTERS.items():
         score = sum(1 for f in fields if cdata.get(f, "").lower() == user_props.get(f, "").lower())
@@ -383,8 +383,8 @@ def match_archetype(user_props):
         score -= fa_diff * 0.5
         if score > best_score:
             best_score = score
-            best_archetype = cid
-    return best_archetype, best_score
+            best_Archetype = cid
+    return best_Archetype, best_score
 
 def render_solution_card(row, score):
     label, badge_cls = score_label(score)
@@ -410,10 +410,10 @@ with st.sidebar:
     st.markdown("---")
 
     if mode == "Use an Archetype":
-        st.markdown("**Select an archetype that best matches your property:**")
-        archetype_options = {f"Archetype {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
-        chosen_label = st.selectbox("Archetype", list(archetype_options.keys()))
-        chosen_archetype = archetype_options[chosen_label]
+        st.markdown("**Select an Archetype that best matches your property:**")
+        Archetype_options = {f"Archetype {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
+        chosen_label = st.selectbox("Archetype", list(Archetype_options.keys()))
+        chosen_Archetype = Archetype_options[chosen_label]
         min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
         min_score_val = 2 if "Best" in min_score else 1
         category_filter = st.multiselect(
@@ -425,11 +425,11 @@ with st.sidebar:
 
     else:
         st.markdown("**Your property details:**")
-        prop_type   = st.selectbox("Property Type", ["House", "Flat", "Bungalow"])
+        prop_type   = st.selectbox("Property Type", ["House", "Flat", "Bungalow", "Maisonette"])
         wall_ins    = st.selectbox("Wall Insulation Status", ["None", "Partial", "Full"])
-        wall_type   = st.selectbox("Wall Type", ["Cavity", "System", "Solid"])
-        built_form  = st.selectbox("Built Form", ["Detached", "Semi-Detached", "Mid-Terrace", "End Terrace"])
-        tenure      = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rented (Private)", "Rental (Social)"])
+        wall_type   = st.selectbox("Wall Type", ["Cavity", "Solid", "Timber", "System", "Other"])
+        built_form  = st.selectbox("Built Form", ["Detached", "Semi-Detached", "End Terrace", "Mid-Terrace", "Enclosed Mid-Terrace", "Enclosed End Terrace"])
+        tenure      = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rental (Social)", "Rented (Private)", "Rented (Social)"])
         const_age   = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
         floor_area  = st.slider("Total Floor Area (m²)", 20, 400, 80)
         min_score   = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
@@ -448,21 +448,21 @@ with st.sidebar:
 st.markdown("""
 <div class="hero-banner">
     <h1>🏠 RetroFit Recommender</h1>
-    <p>Tailored retrofit solutions for UK residential properties — matched to your archetype or property characteristics.</p>
+    <p>Tailored retrofit solutions for UK residential properties — matched to your Archetype or property characteristics.</p>
 </div>
 """, unsafe_allow_html=True)
 
 if not run:
     st.markdown('<div class="section-header">About the Archetypes</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each Archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
         with cols[i % 4]:
             st.markdown(f"""
-            <div class="archetype-card">
-                <div class="archetype-title">Archetype {cid}</div>
-                <div class="archetype-meta">
+            <div class="Archetype-card">
+                <div class="Archetype-title">Archetype {cid}</div>
+                <div class="Archetype-meta">
                     <span class="tag">{cdata['property_type']}</span>
                     <span class="tag">{cdata['built_form']}</span>
                     <span class="tag">{cdata['construction_age']}</span>
@@ -476,8 +476,8 @@ if not run:
 
 else:
     if mode == "Use an Archetype":
-        resolved = chosen_archetype
-        match_method = "archetype"
+        resolved = chosen_Archetype
+        match_method = "Archetype"
     else:
         user_props = {
             "property_type":     prop_type,
@@ -488,19 +488,19 @@ else:
             "construction_age":  const_age,
             "floor_area":        float(floor_area),
         }
-        resolved, _ = match_archetype(user_props)
+        resolved, _ = match_Archetype(user_props)
         match_method = "matched"
 
     cdata  = CLUSTERS[resolved]
     col_id = f"C{resolved}"
 
-    st.markdown(f'<div class="section-header">{"📌 Selected" if match_method=="archetype" else "🎯 Best Matched"} Archetype {resolved}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">{"📌 Selected" if match_method=="Archetype" else "🎯 Best Matched"} Archetype {resolved}</div>', unsafe_allow_html=True)
 
     if match_method == "matched":
         st.markdown(f"""
         <div class="info-box">
             Your property characteristics have been matched to <strong>Archetype {resolved}</strong>.
-            Review the archetype profile below and refine your selections in the sidebar if needed.
+            Review the Archetype profile below and refine your selections in the sidebar if needed.
         </div>
         """, unsafe_allow_html=True)
 
@@ -512,7 +512,7 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-    rec_df = get_recommendations_for_archetype(resolved, min_score_val)
+    rec_df = get_recommendations_for_Archetype(resolved, min_score_val)
     rec_df = rec_df[rec_df["Category"].isin(category_filter)]
 
     # Scale filtering based on built form
@@ -568,10 +568,10 @@ else:
     st.markdown("---")
     st.markdown('<div class="section-header">📊 How You Compare to Other Archetypes</div>', unsafe_allow_html=True)
 
-    my = ARCHETYPE_METRICS[resolved]
-    all_co2  = [v["co2"]  for v in ARCHETYPE_METRICS.values()]
-    all_gap  = [v["gap"]  for v in ARCHETYPE_METRICS.values()]
-    all_cost = [v["cost"] for v in ARCHETYPE_METRICS.values()]
+    my = Archetype_METRICS[resolved]
+    all_co2  = [v["co2"]  for v in Archetype_METRICS.values()]
+    all_gap  = [v["gap"]  for v in Archetype_METRICS.values()]
+    all_cost = [v["cost"] for v in Archetype_METRICS.values()]
     avg_co2  = round(sum(all_co2)  / len(all_co2),  2)
     avg_gap  = round(sum(all_gap)  / len(all_gap),  2)
     avg_cost = round(sum(all_cost) / len(all_cost), 2)
@@ -580,7 +580,7 @@ else:
     def compare_text(val, avg, unit, label, higher_is_worse=True):
         diff = round(abs(val - avg), 2)
         if abs(val - avg) < avg * 0.05:
-            return f"Your {label} ({val} {unit}) is <strong>close to the average</strong> ({avg} {unit}) across all archetypes."
+            return f"Your {label} ({val} {unit}) is <strong>close to the average</strong> ({avg} {unit}) across all Archetypes."
         elif (val > avg) == higher_is_worse:
             return f"Your {label} ({val} {unit}) is <strong style='color:#b45309;'>above average</strong> — the average is {avg} {unit}. There is meaningful room for improvement here."
         else:
@@ -630,7 +630,7 @@ else:
     st.markdown("""
     <div style="font-size:0.78rem;color:#6b7280;">
         <strong>Score guide:</strong>
-        <span style="color:#2d6a4f;font-weight:600;">2 = Best Solution for this archetype</span> ·
+        <span style="color:#2d6a4f;font-weight:600;">2 = Best Solution for this Archetype</span> ·
         <span style="color:#b45309;font-weight:600;">1 = 2nd Best Solution</span> ·
         0 = Not applicable (hidden)
     </div>
