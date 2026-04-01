@@ -250,7 +250,7 @@ CLUSTERS = {
     5: {"label": "Archetype 5 ", "property_type": "Flat",  "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "End Terrace",   "tenure": "Rental (Social)",   "construction_age": "1950-2002", "floor_area": 46.9,  "imd_decile": 0, "income": 32923},
     6: {"label": "Archetype 6 ", "property_type": "House", "wall_insulation": "None",    "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 23.3,  "imd_decile": 1, "income": 33125},
     7: {"label": "Archetype 7 ", "property_type": "House", "wall_insulation": "Full",    "wall_type": "Cavity",  "built_form": "Semi-Detached", "tenure": "Owner Occupied",    "construction_age": "1950-2002", "floor_area": 44.8,  "imd_decile": 1, "income": 33804},
-    8: {"label": "Archetype 8",  "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
+    8: {"label": "Archetype 8 ", "property_type": "House", "wall_insulation": "Partial", "wall_type": "Cavity",  "built_form": "Detached",      "tenure": "Owner Occupied",    "construction_age": "1900-1949", "floor_area": 267.8, "imd_decile": 6, "income": 36368},
 }
 
 SOLUTIONS_RAW = [
