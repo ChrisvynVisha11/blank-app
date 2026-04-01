@@ -5,7 +5,7 @@ import pandas as pd
 # PAGE CONFIG
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="Retrofit Recommender",
+    page_title="RetroFit Recommender",
     page_icon="🏠",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -478,14 +478,14 @@ with st.sidebar:
 
 st.markdown("""
 <div class="hero-banner">
-    <h1>🏠 Retrofit Recommender</h1>
-    <p>Provides retrofit solutions for UK residential properties matched to your archetype or property characteristics.</p>
+    <h1>🏠 RetroFit Recommender</h1>
+    <p>Tailored retrofit solutions for UK residential properties — matched to your archetype or property characteristics.</p>
 </div>
 """, unsafe_allow_html=True)
 
 if not run:
     st.markdown('<div class="section-header">About the Archetypes</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each archetype represents a common UK residential property type. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
