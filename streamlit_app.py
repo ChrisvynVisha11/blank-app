@@ -28,7 +28,7 @@ st.markdown("""
     --accent: #2d6a4f;
     --accent2: #52b788;
     --accent3: #e9c46a;
-    --text: black;
+    --text: #1a1a2e;
     --muted: #6b7280;
     --border: #e5e0d5;
     --red: #e63946;
@@ -49,16 +49,33 @@ h1, h2, h3 {
 [data-testid="stSidebar"] {
     background-color: #1a1a2e !important;
 }
-[data-testid="stSidebar"] * {
-    color: #f5f2eb !important;
-}
 [data-testid="stSidebar"] .stSelectbox label,
 [data-testid="stSidebar"] .stRadio label,
-[data-testid="stSidebar"] .stSlider label {
-    color: #c8c4bb !important;
+[data-testid="stSidebar"] .stSlider label,
+[data-testid="stSidebar"] .stMultiSelect label,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] div {
+    color: #e8e4dc !important;
     font-size: 0.82rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] .stRadio > label > div,
+[data-testid="stSidebar"] .stSelectbox > label,
+[data-testid="stSidebar"] .stMultiSelect > label {
+    color: #ffffff !important;
+}
+
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label span p {
+    color: #e8e4dc !important;
+    text-transform: none !important;
+    font-size: 0.9rem !important;
+    letter-spacing: 0 !important;
 }
 
 .stButton > button {
@@ -86,8 +103,7 @@ h1, h2, h3 {
     color: white;
 }
 .hero-banner h1 {
-    color: white
-    !important;
+    color: white !important;
     margin: 0;
     font-size: 2.4rem;
 }
@@ -329,13 +345,14 @@ SOLUTIONS_DF = pd.DataFrame(SOLUTIONS_RAW, columns=[
 # ─────────────────────────────────────────────
 
 def score_label(s):
-    if s == 2: return ("Strongly Recommended", "badge-green")
-    if s == 1: return ("Consider", "badge-amber")
-    return ("Not Recommended", "badge-red")
+    if s == 2: return ("Best Solution", "badge-green")
+    if s == 1: return ("2nd Best Solution", "badge-amber")
+    return ("Not Applicable", "badge-red")
 
 def get_recommendations_for_cluster(cluster_id, min_score=1):
+    """Only return scores >= min_score. Score 0 = not applicable, always excluded."""
     col = f"C{cluster_id}"
-    df = SOLUTIONS_DF[SOLUTIONS_DF[col] >= min_score].copy()
+    df = SOLUTIONS_DF[(SOLUTIONS_DF[col] >= 1) & (SOLUTIONS_DF[col] >= min_score)].copy()
     df = df.sort_values(col, ascending=False)
     return df
 
@@ -382,8 +399,8 @@ with st.sidebar:
         cluster_options = {f"Cluster {cid}: {cdata['label'].split('–')[1].strip()}": cid for cid, cdata in CLUSTERS.items()}
         chosen_label = st.selectbox("Archetype", list(cluster_options.keys()))
         chosen_cluster = cluster_options[chosen_label]
-        min_score = st.radio("Show recommendations with score:", ["Strongly Recommended only (2)", "Consider & above (1)"], index=1)
-        min_score_val = 2 if "only" in min_score else 1
+        min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
+        min_score_val = 2 if "Best" in min_score else 1
         category_filter = st.multiselect(
             "Filter by category",
             options=SOLUTIONS_DF["Category"].unique().tolist(),
@@ -400,8 +417,8 @@ with st.sidebar:
         tenure = st.selectbox("Tenure", ["Owner Occupied", "Rental (Private)", "Rented (Private)", "Rental (Social)"])
         const_age = st.selectbox("Construction Age", ["Pre-1900", "1900-1949", "1950-2002", "Post-2002"])
         floor_area = st.slider("Total Floor Area (m²)", 20, 400, 80)
-        min_score = st.radio("Show recommendations with score:", ["Strongly Recommended only (2)", "Consider & above (1)"], index=1)
-        min_score_val = 2 if "only" in min_score else 1
+        min_score = st.radio("Show recommendations:", ["Best solutions only (score 2)", "All applicable solutions (score 1 & 2)"], index=1)
+        min_score_val = 2 if "Best" in min_score else 1
         category_filter = st.multiselect(
             "Filter by category",
             options=SOLUTIONS_DF["Category"].unique().tolist(),
@@ -512,9 +529,9 @@ else:
         total = len(rec_df)
         st.markdown(f"""
         <div style="margin-bottom:1rem;">
-            <span class="stat-pill">🟢 {len(strong)} Strongly Recommended</span>
-            <span class="stat-pill">🟡 {len(consider)} To Consider</span>
-            <span class="stat-pill">📋 {total} Total</span>
+            <span class="stat-pill">🟢 {len(strong)} Best Solutions</span>
+            <span class="stat-pill">🟡 {len(consider)} 2nd Best Solutions</span>
+            <span class="stat-pill">📋 {total} Total Applicable</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -524,15 +541,14 @@ else:
         for i, cat in enumerate(categories):
             with tabs[i]:
                 cat_df = rec_df[rec_df["Category"] == cat]
-                # Strong first
                 cat_strong = cat_df[cat_df[col_id] == 2]
                 cat_consider = cat_df[cat_df[col_id] == 1]
                 if not cat_strong.empty:
-                    st.markdown("##### 🟢 Strongly Recommended")
+                    st.markdown("##### 🟢 Best Solutions")
                     for _, row in cat_strong.iterrows():
                         render_solution_card(row, 2)
                 if not cat_consider.empty:
-                    st.markdown("##### 🟡 Consider")
+                    st.markdown("##### 🟡 2nd Best Solutions")
                     for _, row in cat_consider.iterrows():
                         render_solution_card(row, 1)
 
@@ -548,8 +564,8 @@ else:
     st.markdown("""
     <div style="font-size:0.78rem;color:#6b7280;">
         <strong>Score guide:</strong> 
-        <span style="color:#2d6a4f;font-weight:600;">2 = Strongly Recommended</span> · 
-        <span style="color:#b45309;font-weight:600;">1 = Consider</span> · 
-        0 = Not Recommended for this cluster
+        <span style="color:#2d6a4f;font-weight:600;">2 = Best Solution for this cluster</span> · 
+        <span style="color:#b45309;font-weight:600;">1 = 2nd Best Solution</span> · 
+        0 = Not applicable (hidden)
     </div>
     """, unsafe_allow_html=True)
