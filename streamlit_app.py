@@ -235,6 +235,20 @@ h1, h2, h3 {
     color: #78350f;
     margin-bottom: 1rem;
 }
+
+[data-testid="stTabs"] button[role="tab"] {
+    color: #3d3d3d !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-weight: 500 !important;
+}
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+    color: #2d6a4f !important;
+    font-weight: 700 !important;
+    border-bottom-color: #2d6a4f !important;
+}
+[data-testid="stTabs"] button[role="tab"]:hover {
+    color: #2d6a4f !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -440,7 +454,7 @@ st.markdown("""
 if not run:
     # Landing state
     st.markdown('<div class="section-header">About the Clusters</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:white;font-size:1rem;margin-bottom:1.2rem;">Each cluster represents a common UK residential property archetype. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#3d3d3d;font-size:1rem;margin-bottom:1.2rem;">Each cluster represents a common UK residential property archetype. Select one in the sidebar, or enter your own details to get matched.</p>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for i, (cid, cdata) in enumerate(CLUSTERS.items()):
