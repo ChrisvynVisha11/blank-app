@@ -368,7 +368,7 @@ def get_scale_for_built_form(built_form):
     return None
 
 def filter_by_scale(df, scale):
-    if scale is None:
+    if scale is None or df.empty or "Solution" not in df.columns:
         return df
     scale_keywords = ["small", "medium", "large"]
     def row_matches(solution_name):
@@ -379,17 +379,18 @@ def filter_by_scale(df, scale):
         return scale in name_lower
     return df[df["Solution"].apply(row_matches)]
 
-def filter_by_wall_type(df, wall_type):
-    """
-    Filter wall-related solutions based on the user's wall type.
-    Solid wall → External/Internal solid insulation + EPS Boards, Phenolic Foam, Cork, Mineral Wool boards, PIR, Wood Fibre, Aerogel
-    Cavity     → Cavity wall insulation + Mineral Wool (Blown-in), Spray Foam, EPS Beads
-    Other/Timber/System → no wall filtering applied
-    """
+def filter_by_wall_type(df, wall_type, wall_insulation=""):
+    if df.empty or "Solution" not in df.columns:
+        return df
     wt = wall_type.lower() if wall_type else ""
 
     if wt in ("", "not sure", "other", "timber", "system"):
         return df  # no wall filtering
+
+    # If wall insulation is none, show all wall solutions regardless of wall type
+    wall_ins = wall_insulation.lower() if wall_insulation else ""
+    if wall_ins == "none":
+        return df
     SOLID_ONLY = [
         "external solid wall insulation",
         "internal solid wall insulation",
@@ -402,19 +403,15 @@ def filter_by_wall_type(df, wall_type):
         "aerogel insulation",
         "mineral wool (small", "mineral wool (medium", "mineral wool (large",
     ]
-
-    # Solutions only applicable to CAVITY walls
     CAVITY_ONLY = [
         "cavity wall insulation",
         "mineral wool (blown-in)",
         "spray foam",
         "eps beads",
     ]
-
     def is_solid_only(sol):
         s = sol.lower()
         return any(k in s for k in SOLID_ONLY)
-
     def is_cavity_only(sol):
         s = sol.lower()
         return any(k in s for k in CAVITY_ONLY)
@@ -427,8 +424,8 @@ def filter_by_wall_type(df, wall_type):
         return df
 
 def filter_by_floor_type(df, floor_type):
-    """Filter Mineral Wool Batts by floor type — concrete or suspended timber."""
-    ft = floor_type.lower() if floor_type else ""
+    if df.empty or "Solution" not in df.columns:
+        return df
     def row_matches(solution_name):
         s = solution_name.lower()
         if "mineral wool batts" not in s:
@@ -672,9 +669,11 @@ else:
     # Wall type filter — use user input if available, else fall back to archetype wall type
     if match_method == "matched":
         wall_type_resolved = wall_type
+        wall_ins_resolved  = wall_ins
     else:
         wall_type_resolved = cdata["wall_type"]
-    rec_df = filter_by_wall_type(rec_df, wall_type_resolved)
+        wall_ins_resolved  = cdata["wall_insulation"]
+    rec_df = filter_by_wall_type(rec_df, wall_type_resolved, wall_ins_resolved)
     rec_df = filter_by_floor_type(rec_df, floor_type)
 
     scale_label_map = {"small": "Small-scale", "medium": "Medium-scale", "large": "Large-scale"}
