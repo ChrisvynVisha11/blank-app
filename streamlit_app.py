@@ -86,7 +86,8 @@ h1, h2, h3 {
     color: white;
 }
 .hero-banner h1 {
-    color: white !important;
+    color: black
+    !important;
     margin: 0;
     font-size: 2.4rem;
 }
@@ -97,7 +98,7 @@ h1, h2, h3 {
 }
 
 .cluster-card {
-    background: black;
+    background: white;
     border-radius: 12px;
     padding: 1.2rem 1.4rem;
     margin-bottom: 0.8rem;
@@ -137,7 +138,7 @@ h1, h2, h3 {
 }
 
 .rec-card {
-    background: black;
+    background: white;
     border-radius: 12px;
     padding: 1.2rem 1.4rem;
     margin-bottom: 0.9rem;
