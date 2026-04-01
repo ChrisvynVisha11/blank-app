@@ -493,18 +493,7 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-    meta_cols = st.columns(6)
-    meta_items = [
-        ("Property Type", cdata["property_type"]),
-        ("Built Form", cdata["built_form"]),
-        ("Wall Insulation", cdata["wall_insulation"]),
-        ("Wall Type", cdata["wall_type"]),
-        ("Age Band", cdata["construction_age"]),
-        ("Tenure", cdata["tenure"]),
-    ]
-    for i, (k, v) in enumerate(meta_items):
-        with meta_cols[i]:
-            st.metric(k, v)
+
 
     st.markdown(f"""
     <div style="margin-top:0.5rem;margin-bottom:1rem;">
@@ -544,11 +533,11 @@ else:
                 cat_strong = cat_df[cat_df[col_id] == 2]
                 cat_consider = cat_df[cat_df[col_id] == 1]
                 if not cat_strong.empty:
-                    st.markdown("##### 🟢 Best Solutions")
+                    st.markdown('<p style="color:#2d6a4f;font-weight:700;font-size:1rem;margin-bottom:0.5rem;">🟢 Best Solutions</p>', unsafe_allow_html=True)
                     for _, row in cat_strong.iterrows():
                         render_solution_card(row, 2)
                 if not cat_consider.empty:
-                    st.markdown("##### 🟡 2nd Best Solutions")
+                    st.markdown('<p style="color:#b45309;font-weight:700;font-size:1rem;margin-bottom:0.5rem;">🟡 2nd Best Solutions</p>', unsafe_allow_html=True)
                     for _, row in cat_consider.iterrows():
                         render_solution_card(row, 1)
 
